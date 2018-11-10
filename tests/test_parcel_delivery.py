@@ -23,3 +23,27 @@ class TestParcelDeliveryOrder(BaseTestCase):
 
             self.assertEqual(response.status_code, 201)
 
+    def test_admin_can_get_all_parcels(self):
+        """
+        Test that admin can get all delivery orders for all users
+        :return:
+        """
+        with self.client:
+            response = self.client.get(
+                'api/v1/parcels'
+            )
+
+            self.assertEqual(response.status_code, 200)
+
+    def test_user_can_get_all_parcels_belonging_to_them(self):
+        """
+        Test that user can get parcels that belong to them
+        :return:
+        """
+        with self.client:
+            response = self.client.get(
+                'api/v1/parcels',
+                data = json.dumps(dict(email="stanley@gmail.com"))
+            )
+
+            self.assertEqual(response.status_code, 200)
