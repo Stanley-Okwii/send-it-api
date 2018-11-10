@@ -47,3 +47,43 @@ class TestParcelDeliveryOrder(BaseTestCase):
             )
 
             self.assertEqual(response.status_code, 200)
+
+    def test_user_can_get_specific_parcel_that_belongs_to_them(self):
+        """
+        Test that user can get a specific parcel that belong to them
+        :return:
+        """
+        with self.client:
+            response = self.client.get(
+                'api/v1/parcels',
+                data = json.dumps(dict(email="stanley@gmail.com", id="001"))
+            )
+
+            self.assertEqual(response.status_code, 200)
+
+    def test_get_a_parcel_for_user_without_parcel_orders(self):
+        """
+        Test that a user can not get a specific parcel when they have not created one
+        :return:
+        """
+        with self.client:
+            self.register_new_user("noparcel","noparcel@gmail.com","234012")
+            response = self.client.get(
+                'api/v1/parcels?email=noparcel@gmail.com'
+            )
+
+            self.assertEqual(response.status_code, 404)
+
+    def test_get_a_parcel_that_does_not_exist(self):
+        """
+        Test that a user can not get parcel when it does not exist or wrong id is provided
+        :return:
+        """
+        with self.client:
+            self.register_new_user("me","me@me.you","90")
+            response = self.client.get(
+                'api/v1/parcels?email=stanley@gmail.com&id=07'
+            )
+
+            self.assertEqual(response.status_code, 404)
+

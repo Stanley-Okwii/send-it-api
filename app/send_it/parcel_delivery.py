@@ -45,7 +45,17 @@ class ParcelDeliveryOrder(Resource):
     def get(self):
         args = parser.parse_args()
         email = args["email"]
-        if(email):
+        orderId = args["id"]
+        if((len(str(orderId)) > 0) and email):
+            abort_if_email_does_not_match_type_email(email)
+            abort_if_user_does_not_have_orders(email)
+            abort_if_user_does_not_exist(email)
+            abort_if_parcel_does_not_exist(email, orderId)
+            single_parcel = get_specific_parcel(email, orderId)
+
+            return single_parcel, 200
+        elif(email):
+            abort_if_email_does_not_match_type_email(email)
             abort_if_user_does_not_have_orders(email)
             abort_if_user_does_not_exist(email)
             return parcel_delivery_orders[email], 200
