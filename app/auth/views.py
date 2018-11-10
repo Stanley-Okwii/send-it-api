@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import reqparse, Resource
-from app.common.data import user_list
+from app.common.store import user_list, parcel_delivery_orders
 from app.common.util import get_specific_user, \
     abort_if_user_does_not_exist, \
     abort_if_email_does_not_match_type_email, \
@@ -54,5 +54,6 @@ class User(Resource):
         abort_if_password_is_less_than_4_characters(args["password"])
         newUser = { 'name': args['name'], "email": args["email"], "password": args["password"] }
         user_list.append(newUser)
+        parcel_delivery_orders[newUser["email"]] = []
 
         return { "message": "successfully created new user account"}, 201

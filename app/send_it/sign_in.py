@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import reqparse, Resource
-from app.common.data import user_list
+from app.common.store import user_list
 from app.common.util import get_specific_user, \
     abort_if_user_does_not_exist, \
     abort_if_email_does_not_match_type_email, \
