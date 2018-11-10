@@ -61,3 +61,35 @@ class ParcelDeliveryOrder(Resource):
             return parcel_delivery_orders[email], 200
         else:
             return parcel_delivery_orders, 200
+
+    def put(self):
+        args = parser.parse_args()
+        email = args["email"]
+        abort_if_user_does_not_exist(email)
+        abort_if_user_does_not_have_orders(email)
+        orderlist = parcel_delivery_orders[email]
+        abort_if_parcel_does_not_exist(email, args["id"])
+        currentOrder = get_specific_parcel(email, args["id"])
+        location_update = args['current_location']
+        destination_update = args['destination']
+        status_update = args["status"]
+        newOrder = {
+            "id": currentOrder['id'],
+            "parcel": currentOrder['parcel'],
+            "weight": currentOrder['weight'],
+            "price": currentOrder['price'],
+            "receiver": currentOrder['receiver'],
+            "pickup_location": currentOrder['pickup_location'],
+            "destination": destination_update
+                if destination_update
+                else currentOrder['destination'],
+            "current_location": location_update
+                if location_update
+                else currentOrder['current_location'],
+            "status": status_update
+                if status_update
+                else currentOrder['status']
+            }
+        orderlist[orderlist.index(currentOrder)] = newOrder
+        parcel_delivery_orders[email].append(newOrder)
+        return { "message": "parcel has been successfully updated" }, 201

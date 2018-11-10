@@ -87,3 +87,52 @@ class TestParcelDeliveryOrder(BaseTestCase):
 
             self.assertEqual(response.status_code, 404)
 
+    def test_user_can_change_destination_of_a_parcel_delivery_order(self):
+        """
+        Test that a user can change destination of a delivery parcel order
+        :return:
+        """
+        with self.client:
+            self.register_new_user("julie","julie@gmail.com", "00000")
+            self.create_new_parcel_delivery_order(
+                "julie@gmail.com",
+                "025",
+                "veg pizza",
+                '3',
+                "95210",
+                "Oryx",
+                "Wandegeya",
+                "Kikoni"
+                )
+            response = self.client.put(
+                'api/v1/parcels',
+                content_type= "application/json",
+                data = json.dumps(dict(email="julie@gmail.com",id="025", destinaton="new location"))
+                )
+
+            self.assertEqual(response.status_code, 201)
+
+    def test_admin_can_change_current_location_and_status_of_a_parcel_delivery_order(self):
+        """
+        Test that a admin can change current location and status of a delivery parcel order
+        :return:
+        """
+        with self.client:
+            self.register_new_user("julie","julie@gmail.com", "00000")
+            self.create_new_parcel_delivery_order(
+                "julie@gmail.com",
+                "025",
+                "veg pizza",
+                '3',
+                "95210",
+                "Oryx",
+                "Wandegeya",
+                "Kikoni"
+                )
+            response = self.client.put(
+                'api/v1/parcels',
+                content_type= "application/json",
+                data = json.dumps(dict(email="julie@gmail.com",id="025", current_location="new location", status="delivered"))
+                )
+
+            self.assertEqual(response.status_code, 201)
