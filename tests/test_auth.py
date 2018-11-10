@@ -5,7 +5,7 @@ import json
 class TestAuth(BaseTestCase):
     def test_show_welcome_message(self):
         """
-        Test a user is successfully created through the api
+        Test that api displays welcome message
         :return:
         """
         with self.client:
