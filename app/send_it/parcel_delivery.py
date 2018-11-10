@@ -39,4 +39,15 @@ class ParcelDeliveryOrder(Resource):
             "status": "pending",
             }
         parcel_delivery_orders[email].append(newOrder)
+
         return {"message": "parcel delivery order successfully created"}, 201
+
+    def get(self):
+        args = parser.parse_args()
+        email = args["email"]
+        if(email):
+            abort_if_user_does_not_have_orders(email)
+            abort_if_user_does_not_exist(email)
+            return parcel_delivery_orders[email], 200
+        else:
+            return parcel_delivery_orders, 200
