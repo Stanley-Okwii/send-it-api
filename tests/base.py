@@ -6,7 +6,7 @@ import json
 class BaseTestCase(TestCase):
     def create_app(self):
         """
-        Create an instance of the app with the testing configuration
+        Create an instance of the app
         :return:
         """
         return app
@@ -17,12 +17,13 @@ class BaseTestCase(TestCase):
     def tearDown(self):
         pass
 
-    def register_user(self, name, email, password):
+    def register_new_user(self, name, email, password):
         """
         Helper method for registering a user with dummy data
         :return:
         """
         return self.client.post(
-            'v1/user',
+            'api/v1/user',
             content_type='application/json',
-            data=json.dumps(dict(name=name, email=email, password=password)))
+            data=json.dumps(dict(name=name, email=email, password=password))
+            )
