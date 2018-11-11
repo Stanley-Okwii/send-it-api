@@ -22,7 +22,7 @@ This API is hosted at [send-it-api](https://sender-app.herokuapp.com) on [heroku
 ## End points
 ### User
 #### Sign up
-Send a `POST` request to `/api/v1/user` endpoint with request in **JSON** 
+Send a `POST` request to `/api/v1/user` endpoint with request in `JSON` format
 
 An example would be
 ```json
@@ -77,7 +77,7 @@ To create a parcel a `POST` request is sent to `/api/v1/parcels`. The request da
 }
 ```
 
-### Get user`s parcels
+### Get user's parcels
 The user can get their parcels by sending a `GET` request to `/api/v1/parcels/<email>`. Replace `<email>` with the email of the user whose parcels are to be fetched.
 
 ### Get all users' parcels
@@ -87,7 +87,7 @@ The admin can get all users' parcels by sending a `GET` request to `/api/v1/parc
 The user can get their parcels by sending a `GET` request to `/api/v1/parcels/<email>/order/<orderId>`. Replace `<email>` with the email of the user whose parcel is to be fetched and `<orderId>` with the corresponding order id.
 
 ### Edit a parcel
-The user can edit their parcels by sending a `PUT` request to `/api/v1/parcels`.The request data will be in the format shown below. Only destination, current_location and status can be updated, the rest of the information concerning a parcel order is maintained. Status of parcel can be `pending`, `deliverd` or ``cancelled`.
+The user can edit their parcels by sending a `PUT` request to `/api/v1/parcels`.The request data will be in the format shown below. Only destination, current_location and status can be updated, the rest of the information concerning a parcel order is maintained. Status of parcel can be `pending`, `deliverd` or `cancelled`.
 ```json
 {
     "email": "user@gmail.com",
@@ -99,19 +99,19 @@ The user can edit their parcels by sending a `PUT` request to `/api/v1/parcels`.
 ```
 
 ### Running tests without coverage
-You can now run the tests from the terminal
+Run the tests from the terminal
 ```console
 user@user:~$ pytest tests
 ```
 
 ### Running tests with coverage
-You can also run tests with coverage by running this command in the terminal
+Run tests with coverage by running this command in the terminal
 ```console
 user@user:~$ pytest tests --cov=app --cov-report term-missing
 ```
 
 ### Running tests with coverage as html output
-Create a html code coverage output
+Run tests with an html code coverage output
 ```console
 user@user:~$ pytest tests --cov=app --cov-report html --cov-report term-missing
 ```
