@@ -49,7 +49,10 @@ class ParcelDeliveryOrder(Resource):
             abort_if_user_does_not_have_orders(email)
             return parcel_delivery_orders[email], 200
         else:
-            return parcel_delivery_orders, 200
+            flattened_list = [parcel_order
+                for sub_list in parcel_delivery_orders.values()
+                for parcel_order in sub_list]
+            return flattened_list, 200
 
     def put(self):
         args = parser.parse_args()
