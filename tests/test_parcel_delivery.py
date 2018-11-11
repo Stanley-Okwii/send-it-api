@@ -41,9 +41,19 @@ class TestParcelDeliveryOrder(BaseTestCase):
         :return:
         """
         with self.client:
+            self.register_new_user("new_user","new_user@gmail.com", "00000")
+            self.create_new_parcel_delivery_order(
+                "new_user@gmail.com",
+                "045",
+                "Big money",
+                '3',
+                "950",
+                "Diana",
+                "Wandegeya",
+                "Kikoni"
+                )
             response = self.client.get(
-                'api/v1/parcels',
-                data = json.dumps(dict(email="stanley@gmail.com"))
+                'api/v1/parcels/new_user@gmail.com'
             )
 
             self.assertEqual(response.status_code, 200)
@@ -55,8 +65,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
         """
         with self.client:
             response = self.client.get(
-                'api/v1/parcels',
-                data = json.dumps(dict(email="stanley@gmail.com", id="001"))
+                'api/v1/parcels/okwii@gmail.com/order/089'
             )
 
             self.assertEqual(response.status_code, 200)
@@ -69,7 +78,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
         with self.client:
             self.register_new_user("noparcel","noparcel@gmail.com","234012")
             response = self.client.get(
-                'api/v1/parcels?email=noparcel@gmail.com'
+                'api/v1/parcels/noparcel@gmail.com'
             )
 
             self.assertEqual(response.status_code, 404)
@@ -80,9 +89,19 @@ class TestParcelDeliveryOrder(BaseTestCase):
         :return:
         """
         with self.client:
-            self.register_new_user("me","me@me.you","90")
+            self.register_new_user("new_user","new_user@gmail.com", "00000")
+            self.create_new_parcel_delivery_order(
+                "new_user@gmail.com",
+                "045",
+                "Big money",
+                '3',
+                "950",
+                "Diana",
+                "Wandegeya",
+                "Kikoni"
+                )
             response = self.client.get(
-                'api/v1/parcels?email=stanley@gmail.com&id=07'
+                'api/v1/parcels/new_user@gmail.com/order/564'
             )
 
             self.assertEqual(response.status_code, 404)
