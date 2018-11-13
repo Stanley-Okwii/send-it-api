@@ -11,8 +11,9 @@ from app.common.util import (
 
 class SignIn(MethodView):
     def post(self):
-        password = request.args.get('password')
-        email = request.args.get('email')
+        args = request.get_json()
+        password = args['password']
+        email = args['email']
         abort_if_email_does_not_match_type_email(email)
         abort_if_password_is_less_than_4_characters(password)
         abort_if_user_does_not_exist(email)

@@ -19,7 +19,7 @@ class BaseTestCase(TestCase):
 
     def register_new_user(self, name, email, password):
         """
-        Helper method for registering a user with dummy data
+        Helper method for creating a user with test data
         :return:
         """
         return self.client.post(
@@ -30,7 +30,7 @@ class BaseTestCase(TestCase):
 
     def create_new_parcel_delivery_order(self, email,_id,parcel,weight,price,receiver,pickup_location,destination):
         """
-        Helper method for registering a user with dummy data
+        Helper method for registering a user with test data
         :return:
         """
         return self.client.post(

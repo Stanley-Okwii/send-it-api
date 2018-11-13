@@ -1,4 +1,3 @@
-import unittest
 from tests.base import BaseTestCase
 import json
 
@@ -22,7 +21,7 @@ class TestAuth(BaseTestCase):
         """
         with self.client:
             response = self.client.get(
-                'api/v1/users',
+                'api/v1/users?email=admin@gmail.com',
                 content_type='application/json'
             )
             self.assertEqual(response.status_code, 200)

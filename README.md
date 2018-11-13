@@ -2,7 +2,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/Stanley-Okwii/send-it-api/badge.svg?branch=development)](https://coveralls.io/github/Stanley-Okwii/send-it-api?branch=development)
 [![Build Status](https://travis-ci.org/Stanley-Okwii/send-it-api.svg?branch=development)](https://travis-ci.org/Stanley-Okwii/send-it-api/)
 [![Requirements Status](https://requires.io/github/Stanley-Okwii/send-it-api/requirements.svg?branch=development)](https://requires.io/github/Stanley-Okwii/send-it-api/requirements/?branch=development)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/847d5ac9919144b88cb6c0807a36d2f9)](https://app.codacy.com/app/Stanley-Okwii/send-it-api?utm_source=github.com&utm_medium=referral&utm_content=Stanley-Okwii/send-it-api&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e1b69a7d2b1a4e15a7ad9db7a7de6a64)](https://www.codacy.com/app/Stanley-Okwii/send-it-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Stanley-Okwii/send-it-api&amp;utm_campaign=Badge_Grade)
+[![Maintainability](https://api.codeclimate.com/v1/badges/deffc4af002cf7975420/maintainability)](https://codeclimate.com/github/Stanley-Okwii/send-it-api/maintainability)
 
 A set of API endpoints to provide and manipulate data for the SendIT courier services
 

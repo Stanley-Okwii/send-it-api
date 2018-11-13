@@ -7,7 +7,8 @@ from app.common.util import (
     abort_if_email_does_not_match_type_email,
     abort_if_user_does_not_exist,
     get_specific_user,
-    abort_if_password_is_less_than_4_characters
+    abort_if_password_is_less_than_4_characters,
+    abort_if_user_already_exists
     )
 
 class Welcome(MethodView):
@@ -16,7 +17,14 @@ class Welcome(MethodView):
 
 class UserList(MethodView):
     def get(self):
-        return process_response_data(user_list, 200)
+        email = request.args.get('email')
+        abort_if_email_does_not_match_type_email(email)
+        abort_if_user_does_not_exist(email)
+        user = get_specific_user(email)
+        if(user['role'] == 'admin'):
+            return process_response_data(user_list, 200)
+        else:
+            return response("you do not have permission to access this endpoint", 404)
 
 class User(MethodView):
     def get(self, email):
@@ -36,8 +44,8 @@ class User(MethodView):
 
     def put(self, email):
         abort_if_email_does_not_match_type_email(email)
-        user = get_specific_user(email)
         abort_if_user_does_not_exist(email)
+        user = get_specific_user(email)
         name = request.args.get('name')
         password = request.args.get('password')
         abort_if_password_is_less_than_4_characters(password)
@@ -47,10 +55,12 @@ class User(MethodView):
         return response("successfully updated account details", 201)
 
     def post(self):
-        name = request.args.get('name')
-        email = request.args.get('email')
-        password = request.args.get('password')
+        args = request.get_json()
+        name = args['name']
+        email = args['email']
+        password = args['password']
         abort_if_email_does_not_match_type_email(email)
+        abort_if_user_already_exists(email)
         abort_if_password_is_less_than_4_characters(password)
         newUser = { 'name': name, "email": email, "password": password }
         user_list.append(newUser)

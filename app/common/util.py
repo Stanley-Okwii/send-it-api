@@ -36,4 +36,13 @@ def abort_if_parcel_does_not_exist(email, orderId):
 
 def abort_if_user_does_not_have_orders(email):
     if (len(parcel_delivery_orders[email]) == 0):
-        abort(make_response(jsonify(message="User with email {0} does not have any orders".format(email)), 404))
+        abort(make_response(jsonify(message="user with email {0} does not have any orders".format(email)), 404))
+
+def abort_if_attribute_is_empty(attribute, value):
+    if not value:
+        abort(make_response(jsonify(message="attribute {0} or its value is missing".format(attribute)), 400))
+
+def abort_if_user_already_exists(email):
+    user = get_specific_user(email)
+    if user:
+        abort(make_response(jsonify(message="user with email {0} already exists".format(email)), 400))

@@ -15,23 +15,24 @@ from app.common.util import (
 
 class ParcelDeliveryOrder(MethodView):
     def post(self):
-        email = request.args.get('email')
+        args = request.get_json()
+        email = args['email']
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
         newOrder = {
-            "id": request.args.get('id'),
-            "parcel": request.args.get('parcel'),
-            "weight": request.args.get('weight'),
-            "price": request.args.get('price'),
-            "receiver": request.args.get('receiver'),
-            "pickup_location": request.args.get('pickup_location'),
-            "destination": request.args.get('destination'),
-            "current_location": request.args.get('pickup_location'),
-            "status": "pending",
+            'id': args['id'],
+            'parcel': args['parcel'],
+            'weight': args['weight'],
+            'price': args['price'],
+            'receiver': args['receiver'],
+            'pickup_location': args['pickup_location'],
+            'destination': args['destination'],
+            'current_location': args['pickup_location'],
+            'status': 'pending',
             }
         parcel_delivery_orders[email].append(newOrder)
 
-        return response("parcel delivery order successfully created", 201)
+        return response('parcel delivery order successfully created', 201)
 
     def get(self, email=None):
         if(email):
@@ -55,27 +56,28 @@ class ParcelDeliveryOrder(MethodView):
         currentOrder = get_specific_parcel(email,orderId)
         location_update = request.args.get('current_location')
         destination_update = request.args.get('destination')
-        status_update = request.args.get("status")
+        status_update = request.args.get('status')
         newOrder = {
-            "id": currentOrder['id'],
-            "parcel": currentOrder['parcel'],
-            "weight": currentOrder['weight'],
-            "price": currentOrder['price'],
-            "receiver": currentOrder['receiver'],
-            "pickup_location": currentOrder['pickup_location'],
-            "destination": destination_update
+            'id': currentOrder['id'],
+            'parcel': currentOrder['parcel'],
+            'weight': currentOrder['weight'],
+            'price': currentOrder['price'],
+            'receiver': currentOrder['receiver'],
+            'pickup_location': currentOrder['pickup_location'],
+            'destination': destination_update
                 if destination_update
                 else currentOrder['destination'],
-            "current_location": location_update
+            'current_location': location_update
                 if location_update
                 else currentOrder['current_location'],
-            "status": status_update
+            'status': status_update
                 if status_update
                 else currentOrder['status']
             }
         orderlist[orderlist.index(currentOrder)] = newOrder
         parcel_delivery_orders[email].append(newOrder)
-        return response("parcel has been successfully updated", 201)
+
+        return response('parcel has been successfully updated', 201)
 
 class UserParcelOrder(MethodView):
     def get(self, email, orderId):

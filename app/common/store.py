@@ -2,12 +2,20 @@ user_list = [
     {
         "name":"stanley",
         "email":"stanley@gmail.com",
-        "password":"123456"
+        "password":"123456",
+        "role": "user"
     },
     {
         "name":"okwii",
         "email":"okwii@gmail.com",
-        "password":"000000"
+        "password":"000000",
+        "role": "user"
+    },
+    {
+        "name":"admin",
+        "email":"admin@gmail.com",
+        "password":"admin",
+        "role": "admin"
     }
 ]
 
