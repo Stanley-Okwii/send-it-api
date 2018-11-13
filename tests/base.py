@@ -1,4 +1,4 @@
-from app import app
+from app import api
 from flask_testing import TestCase
 import json
 
@@ -9,7 +9,7 @@ class BaseTestCase(TestCase):
         Create an instance of the app
         :return:
         """
-        return app
+        return api
 
     def setUp(self):
         pass
