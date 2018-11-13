@@ -1,70 +1,61 @@
-from flask import Flask
-from flask_restful import reqparse, Resource
+from flask import jsonify, request
+from flask.views import MethodView
 from app.common.store import parcel_delivery_orders
-from app.common.util import get_specific_user, \
-    abort_if_user_does_not_exist, \
-    abort_if_email_does_not_match_type_email, \
-    abort_if_password_is_less_than_4_characters, \
-    abort_if_user_does_not_have_orders, \
-    abort_if_parcel_does_not_exist, \
-    get_specific_parcel
+from app.common.util import (
+    get_specific_user,
+    abort_if_user_does_not_exist,
+    abort_if_email_does_not_match_type_email,
+    abort_if_password_is_less_than_4_characters,
+    abort_if_user_does_not_have_orders,
+    abort_if_parcel_does_not_exist,
+    get_specific_parcel,
+    response,
+    process_response_data
+    )
 
-parser = reqparse.RequestParser()
-parser.add_argument('id')
-parser.add_argument('parcel')
-parser.add_argument('email')
-parser.add_argument('weight', type=int, help='weight cannot be converted')
-parser.add_argument('price')
-parser.add_argument('receiver')
-parser.add_argument('pickup_location')
-parser.add_argument('destination')
-parser.add_argument('current_location')
-parser.add_argument('status')
-
-class ParcelDeliveryOrder(Resource):
+class ParcelDeliveryOrder(MethodView):
     def post(self):
-        args = parser.parse_args()
-        email = args["email"]
+        email = request.args.get('email')
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
         newOrder = {
-            "id": args['id'],
-            "parcel": args['parcel'],
-            "weight": args['weight'],
-            "price": args['price'],
-            "receiver": args['receiver'],
-            "pickup_location": args['pickup_location'],
-            "destination": args['destination'],
-            "current_location": args['pickup_location'],
+            "id": request.args.get('id'),
+            "parcel": request.args.get('parcel'),
+            "weight": request.args.get('weight'),
+            "price": request.args.get('price'),
+            "receiver": request.args.get('receiver'),
+            "pickup_location": request.args.get('pickup_location'),
+            "destination": request.args.get('destination'),
+            "current_location": request.args.get('pickup_location'),
             "status": "pending",
             }
         parcel_delivery_orders[email].append(newOrder)
 
-        return {"message": "parcel delivery order successfully created"}, 201
+        return response("parcel delivery order successfully created", 201)
 
     def get(self, email=None):
         if(email):
             abort_if_email_does_not_match_type_email(email)
             abort_if_user_does_not_exist(email)
             abort_if_user_does_not_have_orders(email)
-            return parcel_delivery_orders[email], 200
+            return process_response_data(parcel_delivery_orders[email], 200)
         else:
             flattened_list = [parcel_order
                 for sub_list in parcel_delivery_orders.values()
                 for parcel_order in sub_list]
-            return flattened_list, 200
+            return process_response_data(flattened_list, 200)
 
     def put(self):
-        args = parser.parse_args()
-        email = args["email"]
+        email = request.args.get('email')
+        orderId = request.args.get('id')
         abort_if_user_does_not_exist(email)
         abort_if_user_does_not_have_orders(email)
         orderlist = parcel_delivery_orders[email]
-        abort_if_parcel_does_not_exist(email, args["id"])
-        currentOrder = get_specific_parcel(email, args["id"])
-        location_update = args['current_location']
-        destination_update = args['destination']
-        status_update = args["status"]
+        abort_if_parcel_does_not_exist(email, orderId)
+        currentOrder = get_specific_parcel(email,orderId)
+        location_update = request.args.get('current_location')
+        destination_update = request.args.get('destination')
+        status_update = request.args.get("status")
         newOrder = {
             "id": currentOrder['id'],
             "parcel": currentOrder['parcel'],
@@ -84,9 +75,9 @@ class ParcelDeliveryOrder(Resource):
             }
         orderlist[orderlist.index(currentOrder)] = newOrder
         parcel_delivery_orders[email].append(newOrder)
-        return { "message": "parcel has been successfully updated" }, 201
+        return response("parcel has been successfully updated", 201)
 
-class UserParcelOrder(Resource):
+class UserParcelOrder(MethodView):
     def get(self, email, orderId):
         if((len(str(orderId)) > 0) and email):
             abort_if_email_does_not_match_type_email(email)
@@ -95,4 +86,4 @@ class UserParcelOrder(Resource):
             abort_if_parcel_does_not_exist(email, orderId)
             single_parcel = get_specific_parcel(email, orderId)
 
-        return single_parcel, 200
+        return process_response_data(single_parcel, 200)
