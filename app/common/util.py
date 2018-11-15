@@ -39,7 +39,7 @@ def abort_if_user_does_not_have_orders(email):
         abort(make_response(jsonify(message="user with email {0} does not have any orders".format(email)), 404))
 
 def abort_if_attribute_is_empty(attribute, value):
-    if not value:
+    if value == "" or not value:
         abort(make_response(jsonify(message="attribute {0} or its value is missing".format(attribute)), 400))
 
 def abort_if_user_already_exists(email):
@@ -65,4 +65,12 @@ def abort_if_parcel_input_is_not_valid(parameter):
 
 def abort_if_content_type_is_not_json():
     if request.content_type != "application/json":
-        abort(make_response(jsonify(message="content type must be application/json"),400))
+        abort(make_response(jsonify(message="content type must be application/json"), 400))
+
+def abort_if_user_input_is_missing(parameter, details):
+    user_provided_attributes = parameter.keys()
+    missing_attributes = list(set(details) - set(user_provided_attributes))
+    if len(missing_attributes) > 0:
+        abort(make_response(jsonify(
+            message="attribute(s): {0} are missing".format(", ".join(missing_attributes))),
+            400))

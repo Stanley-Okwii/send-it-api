@@ -1,6 +1,5 @@
 from tests.base import BaseTestCase
 import json
-import pytest
 
 class TestParcelDeliveryOrder(BaseTestCase):
     def test_user_can_create_a_parcel_delivery_order(self):
@@ -23,6 +22,51 @@ class TestParcelDeliveryOrder(BaseTestCase):
 
             self.assertEqual(response.status_code, 201)
 
+    def test_user_can_not_create_a_parcel_delivery_order_with_missing_parameter(self):
+        """
+        Test that a user can not create a delivery parcel order with missing parameter
+        :return:
+        """
+        with self.client:
+            self.register_new_user("user","user4@gmail.com", "00000", "user")
+            response = self.client.post(
+            'api/v1/parcels',
+            content_type = 'application/json',
+            data = json.dumps(dict(
+                email='user4@gmail.com',
+                parcel="parcel",
+                weight="90",
+                price="020",
+                receiver="receiver",
+                pickup_location="pickup_location",
+                destination="destination"
+                ))
+            )
+            self.assertEqual(response.status_code, 400)
+
+    def test_user_can_not_create_a_parcel_delivery_order_with_in_valid_parameter(self):
+        """
+        Test that a user can not create a delivery parcel order with in valid parameter
+        :return:
+        """
+        with self.client:
+            self.register_new_user("user","user5@gmail.com", "00000", "user")
+            response = self.client.post(
+            'api/v1/parcels',
+            content_type = 'application/json',
+            data = json.dumps(dict(
+                email='user5@gmail.com',
+                id='',
+                parcel="parcel",
+                weight="90",
+                price="020",
+                receiver="receiver",
+                pickup_location="pickup_location",
+                destination="destination"
+                ))
+            )
+            self.assertEqual(response.status_code, 400)
+
     def test_admin_can_get_all_parcels(self):
         """
         Test that admin can get all delivery orders for all users
@@ -35,7 +79,6 @@ class TestParcelDeliveryOrder(BaseTestCase):
 
             self.assertEqual(response.status_code, 200)
 
-    @pytest.mark.skip(reason="no way of currently testing this")
     def test_user_can_get_all_parcels_belonging_to_them(self):
         """
         Test that user can get parcels that belong to them
@@ -54,7 +97,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
                 "Kikoni"
                 )
             response = self.client.get(
-                'api/v1/users/stanley@gmail.com/parcels'
+                'api/v1/users/new_user@gmail.com/parcels'
             )
 
             self.assertEqual(response.status_code, 200)
@@ -71,8 +114,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
 
             self.assertEqual(response.status_code, 200)
 
-    @pytest.mark.skip(reason="no way of currently testing this")
-    def test_user_can_not_get_a_parcel_for_user_without_parcel_orders(self):
+    def test_user_can_not_get_a_parcel_for_user_who_has_not_created_parcel_orders(self):
         """
         Test that a user can not get a specific parcel when they have not created one
         :return:
@@ -157,3 +199,28 @@ class TestParcelDeliveryOrder(BaseTestCase):
                 )
 
             self.assertEqual(response.status_code, 201)
+
+    def test_user_can_change_destination_of_a_parcel_delivery_order_that_does_not_exist(self):
+        """
+        Test that a user can change destination of a delivery parcel order which doesnt exist
+        :return:
+        """
+        with self.client:
+            self.register_new_user("julie","julie2@gmail.com", "00000", "user")
+            self.create_new_parcel_delivery_order(
+                "julie2@gmail.com",
+                "025",
+                "veg pizza",
+                '3',
+                "95210",
+                "Oryx",
+                "Wandegeya",
+                "Kikoni"
+                )
+            response = self.client.put(
+                'api/v1/parcels',
+                content_type= "application/json",
+                data = json.dumps(dict(email="julie2@gmail.com",id="225", destinaton="new location"))
+                )
+
+            self.assertEqual(response.status_code, 404)

@@ -6,14 +6,21 @@ from app.common.util import (
     abort_if_user_does_not_exist,
     abort_if_email_does_not_match_type_email,
     abort_if_password_is_less_than_4_characters,
-    response
+    response,
+    abort_if_content_type_is_not_json,
+    abort_if_user_input_is_missing,
+    abort_if_attribute_is_empty
     )
 
 class SignIn(MethodView):
     def post(self):
+        abort_if_content_type_is_not_json()
         args = request.get_json()
+        abort_if_user_input_is_missing(args, ["email", "password"])
         password = args['password']
         email = args['email']
+        abort_if_attribute_is_empty("email", email)
+        abort_if_attribute_is_empty("password", password)
         abort_if_email_does_not_match_type_email(email)
         abort_if_password_is_less_than_4_characters(password)
         abort_if_user_does_not_exist(email)

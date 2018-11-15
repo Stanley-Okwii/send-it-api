@@ -13,7 +13,8 @@ from app.common.util import (
     process_response_data,
     abort_if_parcel_input_is_missing,
     abort_if_parcel_input_is_not_valid,
-    abort_if_content_type_is_not_json
+    abort_if_content_type_is_not_json,
+    abort_if_attribute_is_empty
     )
 
 class ParcelDeliveryOrder(MethodView):
@@ -41,6 +42,7 @@ class ParcelDeliveryOrder(MethodView):
         return response('parcel delivery order successfully created', 201)
 
     def get(self, email):
+        abort_if_attribute_is_empty("email", email)
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
         user = get_specific_user(email)
