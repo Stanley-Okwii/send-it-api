@@ -23,7 +23,7 @@ This API is hosted at [send-it-api](https://sender-app.herokuapp.com) on [heroku
 ## End points
 ### User
 #### Sign up
-Send a `POST` request to `/api/v1/user` endpoint with request in `JSON` format.
+Send a `POST` request to `/api/v1/user` endpoint with request in `JSON` format. To sign up as admin, "role" should a value `admin`. 
 
 An example would be
 ```json
@@ -81,10 +81,10 @@ To create a parcel a `POST` request is sent to `/api/v1/parcels`. The request da
 ```
 
 ### Get user's parcels
-The user can get their parcels by sending a `GET` request to `/api/v1/user/<email>parcels`. Replace `<email>` with the email of the user whose parcels are to be fetched.
+The user can get their parcels by sending a `GET` request to `/api/v1/users/<email>parcels`. Replace `<email>` with the email of the user whose parcels are to be fetched.
 
 ### Get all users' parcels
-The admin can get all users' parcels by sending a `GET` request to `/api/v1/user/<admin-email>parcels`. Replace `<admin-email>` with the email of the administrator.
+The admin can get all users' parcels by sending a `GET` request to `/api/v1/users/<admin-email>parcels`. Replace `<admin-email>` with the email of the administrator.
 
 ### Get a user parcel by order id
 The user can get their parcels by sending a `GET` request to `/api/v1/parcels/<orderId>`. Replace `<orderId>` with the corresponding order id to retrieve.
