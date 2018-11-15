@@ -12,11 +12,14 @@ class TestAuth(BaseTestCase):
                 'api/v1',
                 content_type='application/json'
             )
+            response_data = json.loads(response.data.decode())
+
+            self.assertTrue(response_data['message'] == "welcome to send it api v1")
             self.assertEqual(response.status_code, 200)
 
-    def test_show_all_registered_users(self):
+    def test_to_show_all_registered_users(self):
         """
-        Test a user is successfully created through the api
+        Test to fetch all users by an admin
         :return:
         """
         with self.client:
@@ -56,7 +59,7 @@ class TestAuth(BaseTestCase):
 
     def test_update_of_user_information(self):
         """
-        Test a user can update their account name and password
+        Test a user can update their account name, role and password
         :return:
         """
         with self.client:
@@ -66,7 +69,9 @@ class TestAuth(BaseTestCase):
                 content_type= "application/json",
                 data=json.dumps(dict(name="superstar", password="007007"))
             )
+            response_data = json.loads(response.data.decode())
 
+            self.assertTrue(response_data['message'] == "successfully updated account details")
             self.assertEqual(response.status_code, 201)
 
     def test_delete_user(self):
@@ -78,8 +83,10 @@ class TestAuth(BaseTestCase):
             response = self.client.delete(
                 'api/v1/user/stanley@gmail.com'
             )
+            response_data = json.loads(response.data.decode())
 
-            self.assertEqual(response.status_code, 204)
+            self.assertTrue(response_data['message'] == "user account deleted")
+            self.assertEqual(response.status_code, 200)
 
     def test_fetch_specific_user(self):
         """
@@ -102,19 +109,23 @@ class TestAuth(BaseTestCase):
             response = self.client.get(
                 'api/v1/user/owiigmail.com'
             )
+            response_data = json.loads(response.data.decode())
 
+            self.assertTrue(response_data['message'] == "missing or incorrect email format")
             self.assertEqual(response.status_code, 400)
 
     def test_fetch_user_who_is_not_registered(self):
         """
-        Test to get details of a given user with a wrong email format
+        Test attempt to get details of a given user who is not registered
         :return:
         """
         with self.client:
             response = self.client.get(
                 'api/v1/user/andries@gmail.com'
             )
+            response_data = json.loads(response.data.decode())
 
+            self.assertTrue(response_data['message'] == "user with email andries@gmail.com doesn't exist")
             self.assertEqual(response.status_code, 404)
 
     def test_register_new_user_with_password_less_than_4_characters(self):
@@ -124,7 +135,9 @@ class TestAuth(BaseTestCase):
         """
         with self.client:
             response = self.register_new_user("wrong_user", "wrong_user@gmail.com", "123", "user")
+            response_data = json.loads(response.data.decode())
 
+            self.assertTrue(response_data['message'] == "password is missing or less than 4 characters")
             self.assertEqual(response.status_code, 400)
 
     def test_custom_error_url_found(self):
@@ -136,7 +149,9 @@ class TestAuth(BaseTestCase):
             response = self.client.put(
                 '/api/v1/users/stanley@gmail.com/forget'
             )
+            response_data = json.loads(response.data.decode())
 
+            self.assertTrue(response_data['message'] == "The requested endpoint was not found")
             self.assertEqual(response.status_code, 404)
 
     def test_custom_error_method_not_allowed_for_the_requested_URL(self):
@@ -148,7 +163,9 @@ class TestAuth(BaseTestCase):
             response = self.client.patch(
                 'api/v1/user'
             )
+            response_data = json.loads(response.data.decode())
 
+            self.assertTrue(response_data['message'] == "The method is not allowed for the requested URL")
             self.assertEqual(response.status_code, 405)
 
     def test_sign_in_request_is_json(self):
@@ -162,8 +179,9 @@ class TestAuth(BaseTestCase):
                 content_type='application/javascript',
                 data=json.dumps(dict(email='example@gmail.com', password='123456')))
             data = json.loads(response.data.decode())
+
+            self.assertTrue(data['message'] == 'content type must be application/json')
             self.assertTrue(response.status, 400)
-            self.assertTrue(data['message'] == 'content type must be application/json', msg='Check the returned message')
 
     def test_sign_up_with_empty_string(self):
         """
@@ -175,11 +193,14 @@ class TestAuth(BaseTestCase):
                 '/api/v1/user',
                 content_type='application/json',
                 data=json.dumps(dict(email='new@gmail.com', password='123456', role="user", name="")))
+            data = json.loads(response.data.decode())
+
+            self.assertTrue(data['message'] == 'attribute name or its value is missing')
             self.assertTrue(response.status_code, 400)
 
     def test_sign_up_with_missing_property(self):
         """
-        Test user can not sign up with property
+        Test user can not sign up with missing property
         :return:
         """
         with self.client:
@@ -187,5 +208,7 @@ class TestAuth(BaseTestCase):
                 '/api/v1/user',
                 content_type='application/json',
                 data=json.dumps(dict(email='new@gmail.com', password='123456', name="")))
-            self.assertTrue(response.status_code, 400)
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'attribute(s): role are missing')
+            self.assertTrue(response.status_code, 400)

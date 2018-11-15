@@ -19,7 +19,9 @@ class TestParcelDeliveryOrder(BaseTestCase):
                 "Wandegeya",
                 "Kikoni"
                 )
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'parcel delivery order successfully created')
             self.assertEqual(response.status_code, 201)
 
     def test_user_can_not_create_a_parcel_delivery_order_with_missing_parameter(self):
@@ -42,6 +44,9 @@ class TestParcelDeliveryOrder(BaseTestCase):
                 destination="destination"
                 ))
             )
+            data = json.loads(response.data.decode())
+
+            self.assertTrue(data['message'] == 'attribute(s): id are missing')
             self.assertEqual(response.status_code, 400)
 
     def test_user_can_not_create_a_parcel_delivery_order_with_in_valid_parameter(self):
@@ -65,6 +70,9 @@ class TestParcelDeliveryOrder(BaseTestCase):
                 destination="destination"
                 ))
             )
+            data = json.loads(response.data.decode())
+
+            self.assertTrue(data['message'] == 'value of id is not have valid')
             self.assertEqual(response.status_code, 400)
 
     def test_admin_can_get_all_parcels(self):
@@ -114,7 +122,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
 
             self.assertEqual(response.status_code, 200)
 
-    def test_user_can_not_get_a_parcel_for_user_who_has_not_created_parcel_orders(self):
+    def test_user_can_not_get_a_parcel_when_none_is_created_parcel_orders(self):
         """
         Test that a user can not get a specific parcel when they have not created one
         :return:
@@ -124,7 +132,9 @@ class TestParcelDeliveryOrder(BaseTestCase):
             response = self.client.get(
                 'api/v1/users/no_parcel@gmail.com/parcels'
             )
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'user with email no_parcel@gmail.com does not have any orders')
             self.assertEqual(response.status_code, 404)
 
     def test_get_a_parcel_that_does_not_exist(self):
@@ -147,7 +157,9 @@ class TestParcelDeliveryOrder(BaseTestCase):
             response = self.client.get(
                 'api/v1/parcels/564'
             )
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'parcel order with id 564 does not exist')
             self.assertEqual(response.status_code, 404)
 
     def test_user_can_change_destination_of_a_parcel_delivery_order(self):
@@ -172,7 +184,9 @@ class TestParcelDeliveryOrder(BaseTestCase):
                 content_type= "application/json",
                 data = json.dumps(dict(email="julie@gmail.com",id="025", destinaton="new location"))
                 )
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'parcel has been successfully updated')
             self.assertEqual(response.status_code, 201)
 
     def test_admin_can_change_current_location_and_status_of_a_parcel_delivery_order(self):
@@ -197,12 +211,14 @@ class TestParcelDeliveryOrder(BaseTestCase):
                 content_type= "application/json",
                 data = json.dumps(dict(email="julie@gmail.com",id="025", current_location="new location", status="delivered"))
                 )
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'parcel has been successfully updated')
             self.assertEqual(response.status_code, 201)
 
     def test_user_can_change_destination_of_a_parcel_delivery_order_that_does_not_exist(self):
         """
-        Test that a user can change destination of a delivery parcel order which doesnt exist
+        Test that a user can change destination of a delivery parcel order which does not exist
         :return:
         """
         with self.client:
@@ -222,5 +238,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
                 content_type= "application/json",
                 data = json.dumps(dict(email="julie2@gmail.com",id="225", destinaton="new location"))
                 )
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'parcel order with id 225 does not exist')
             self.assertEqual(response.status_code, 404)

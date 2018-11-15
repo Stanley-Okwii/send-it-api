@@ -14,7 +14,9 @@ class TestSignIn(BaseTestCase):
                 content_type='application/json',
                 data=json.dumps(dict(email="user@gmail.com", password="00000"))
             )
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'You logged in successfully.')
             self.assertEqual(response.status_code, 200)
 
     def test_user_login_with_incorrect_password(self):
@@ -29,5 +31,7 @@ class TestSignIn(BaseTestCase):
                 content_type='application/json',
                 data=json.dumps(dict(email="new_user@gmail.com", password="000123"))
             )
+            data = json.loads(response.data.decode())
 
+            self.assertTrue(data['message'] == 'Invalid email or password, Please try again')
             self.assertEqual(response.status_code, 401)

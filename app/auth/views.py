@@ -41,7 +41,7 @@ class User(MethodView):
         user_to_delete = get_specific_user(email)
         user_list.remove(user_to_delete)
 
-        return response("user account deleted", 204)
+        return response("user account deleted", 200)
 
     def put(self, email):
         abort_if_email_does_not_match_type_email(email)
@@ -53,7 +53,14 @@ class User(MethodView):
         abort_if_attribute_is_empty("name", name)
         password = args['password']
         abort_if_password_is_less_than_4_characters(password)
-        newUser = { 'name': name, "email": user["email"], "password": password, 'role': user['role'] }
+        newUser = {
+            'name': name,
+            "email": user["email"],
+            "password": password,
+            'role': args['role']
+                if 'role' in args.keys()
+                else user['role'],
+            }
         user_list[user_list.index(user)] = newUser
 
         return response("successfully updated account details", 201)
