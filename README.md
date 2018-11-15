@@ -80,16 +80,16 @@ To create a parcel a `POST` request is sent to `/api/v1/parcels`. The request da
 }
 ```
 
-### Get user's parcels
+#### Get user's parcels
 The user can get their parcels by sending a `GET` request to `/api/v1/users/<email>parcels`. Replace `<email>` with the email of the user whose parcels are to be fetched.
 
-### Get all users' parcels
+#### Get all users' parcels
 The admin can get all users' parcels by sending a `GET` request to `/api/v1/users/<admin-email>parcels`. Replace `<admin-email>` with the email of the administrator.
 
-### Get a user parcel by order id
+#### Get a user parcel by order id
 The user can get their parcels by sending a `GET` request to `/api/v1/parcels/<orderId>`. Replace `<orderId>` with the corresponding order id to retrieve.
 
-### Edit a parcel
+#### Edit a parcel
 The user can edit their parcels by sending a `PUT` request to `/api/v1/parcels`.The request data will be in the format shown below. Only destination, current_location and status can be updated, the rest of the information concerning a parcel order is maintained. Status of parcel can be `pending`, `delivered` or `cancelled`.
 ```json
 {
@@ -98,6 +98,74 @@ The user can edit their parcels by sending a `PUT` request to `/api/v1/parcels`.
     "destination": "Kireka",
     "current_location": "kampala road",
     "status": "delivered"
+}
+```
+### Sample of existing dummy test data
+The data below is already existing data in the api and can be used for testing purposes.  
+A list of users:  
+```json
+user_list = [
+    {
+        "name":"stanley",
+        "email":"stanley@gmail.com",
+        "password":"123456",
+        "role": "user"
+    },
+    {
+        "name":"okwii",
+        "email":"okwii@gmail.com",
+        "password":"000000",
+        "role": "user"
+    },
+    {
+        "name":"admin",
+        "email":"admin@gmail.com",
+        "password":"admin",
+        "role": "admin"
+    }
+]
+```
+
+Parcel delivery orders:
+```json
+parcel_delivery_orders = {
+        "stanley@gmail.com": [
+            {
+                "id": "001",
+                "parcel": "Goat",
+                "weight": 50,
+                "price": 7000,
+                "receiver": "Mary",
+                "pickup_location": "Mbale",
+                "destination": "Iganga",
+                "current_location": "Mbale Town",
+                "status": "pending"
+            },
+            {
+                "id": "009",
+                "parcel": "Pig",
+                "weight": 150,
+                "price": 1089000,
+                "receiver": "Nicolette",
+                "pickup_location": "Kampala",
+                "destination": "Kumi",
+                "current_location": "Mbale",
+                "status": "delivered"
+            }
+        ],
+        "okwii@gmail.com": [
+            {
+                "id": "089",
+                "parcel": "Pig",
+                "weight": 150,
+                "price": 1089000,
+                "receiver": "Nicolette",
+                "pickup_location": "Kampala",
+                "destination": "Kumi",
+                "current_location": "Mbale",
+                "status": "delivered"
+            }
+        ]
 }
 ```
 
