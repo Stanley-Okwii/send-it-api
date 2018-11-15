@@ -1,5 +1,5 @@
 from app.common.store import user_list, parcel_delivery_orders
-from flask import abort, jsonify, make_response
+from flask import abort, jsonify, make_response, request
 import re
 
 def response(message, status):
@@ -46,3 +46,23 @@ def abort_if_user_already_exists(email):
     user = get_specific_user(email)
     if user:
         abort(make_response(jsonify(message="user with email {0} already exists".format(email)), 400))
+
+def abort_if_parcel_input_is_missing(parameter):
+    parcel_details = ["email", "id", "parcel","weight", "price", "receiver", "pickup_location", "destination"]
+    user_provided_attributes = parameter.keys()
+    missing_attributes = list(set(parcel_details) - set(user_provided_attributes))
+    if len(missing_attributes) > 0:
+        abort(make_response(jsonify(
+            message="attribute(s): {0} are missing".format(", ".join(missing_attributes))),
+            400))
+
+def abort_if_parcel_input_is_not_valid(parameter):
+    for key, value in parameter.items():
+        if(not value or value == ""):
+            abort(make_response(
+                jsonify(message="value of {0} is not have valid".format(key)),
+                400))
+
+def abort_if_content_type_is_not_json():
+    if request.content_type != "application/json":
+        abort(make_response(jsonify(message="content type must be application/json"),400))

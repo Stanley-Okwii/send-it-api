@@ -17,7 +17,7 @@ class BaseTestCase(TestCase):
     def tearDown(self):
         pass
 
-    def register_new_user(self, name, email, password):
+    def register_new_user(self, name, email, password, role):
         """
         Helper method for creating a user with test data
         :return:
@@ -25,7 +25,7 @@ class BaseTestCase(TestCase):
         return self.client.post(
             'api/v1/user',
             content_type='application/json',
-            data=json.dumps(dict(name=name, email=email, password=password))
+            data=json.dumps(dict(name=name, email=email, password=password, role= role))
             )
 
     def create_new_parcel_delivery_order(self, email,_id,parcel,weight,price,receiver,pickup_location,destination):

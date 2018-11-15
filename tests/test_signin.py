@@ -8,7 +8,7 @@ class TestSignIn(BaseTestCase):
         :return:
         """
         with self.client:
-            self.register_new_user("user","user@gmail.com", "00000")
+            self.register_new_user("user","user@gmail.com", "00000", "user")
             response = self.client.post(
                 'api/v1/auth/signin',
                 content_type='application/json',
@@ -23,7 +23,7 @@ class TestSignIn(BaseTestCase):
         :return:
         """
         with self.client:
-            self.register_new_user("newuser","new_user@gmail.com", "00000")
+            self.register_new_user("newuser","new_user@gmail.com", "00000", "user")
             response = self.client.post(
                 'api/v1/auth/signin',
                 content_type='application/json',

@@ -25,6 +25,6 @@ api.add_url_rule("/api/v1/user", view_func=user_view, methods=['POST'])
 api.add_url_rule("/api/v1/users",  view_func=user_list_view, methods=['GET'])
 api.add_url_rule("/api/v1/auth/signin",  view_func=sign_in_view, methods=['POST'])
 api.add_url_rule("/api/v1/parcels",  view_func=parcel_delivery_order_view, methods=['POST', 'GET','PUT'])
-api.add_url_rule("/api/v1/parcels/<email>", view_func=parcel_delivery_order_view, methods=['GET'])
-api.add_url_rule("/api/v1/parcels/<email>/order/<orderId>",
+api.add_url_rule("/api/v1/users/<email>/parcels", view_func=parcel_delivery_order_view, methods=['GET'])
+api.add_url_rule("/api/v1/parcels/<orderId>",
                  view_func=user_parcel_order_view, methods=['GET'])

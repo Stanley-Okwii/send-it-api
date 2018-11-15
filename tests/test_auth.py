@@ -32,7 +32,7 @@ class TestAuth(BaseTestCase):
         :return:
         """
         with self.client:
-            response = self.register_new_user("ajori","ajori@gmail.com","000000")
+            response = self.register_new_user("ajori","ajori@gmail.com","000000", "user")
             data = response.get_json()
 
             self.assertTrue(data['message'] == 'successfully created new user account')
@@ -44,7 +44,7 @@ class TestAuth(BaseTestCase):
         :return:
         """
         with self.client:
-            self.register_new_user("joyce","joyce@gmail.com","000000")
+            self.register_new_user("joyce","joyce@gmail.com","000000", "user")
             response = self.client.put(
                 'api/v1/user/joyce@gmail.com',
                 data=json.dumps(dict(name="superstar", password="007007"))
@@ -106,6 +106,6 @@ class TestAuth(BaseTestCase):
         :return:
         """
         with self.client:
-            response = self.register_new_user("wrong_user", "wrong_user@gmail.com", "123")
+            response = self.register_new_user("wrong_user", "wrong_user@gmail.com", "123", "user")
 
             self.assertEqual(response.status_code, 400)
