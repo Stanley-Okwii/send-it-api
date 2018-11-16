@@ -10,7 +10,8 @@ from app.common.util import (
     abort_if_password_is_less_than_4_characters,
     abort_if_user_already_exists,
     abort_if_attribute_is_empty,
-    abort_if_user_input_is_missing
+    abort_if_user_input_is_missing,
+    abort_if_content_type_is_not_json
     )
 
 class Welcome(MethodView):
@@ -44,6 +45,7 @@ class User(MethodView):
         return response("user account deleted", 200)
 
     def put(self, email):
+        abort_if_content_type_is_not_json
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
         user = get_specific_user(email)
@@ -66,6 +68,7 @@ class User(MethodView):
         return response("successfully updated account details", 201)
 
     def post(self):
+        abort_if_content_type_is_not_json()
         args = request.get_json()
         abort_if_user_input_is_missing(args, ["name","email","password", "role"])
         name = args['name']

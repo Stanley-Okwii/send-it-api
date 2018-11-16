@@ -14,7 +14,8 @@ from app.common.util import (
     abort_if_parcel_input_is_missing,
     abort_if_parcel_input_is_not_valid,
     abort_if_content_type_is_not_json,
-    abort_if_attribute_is_empty
+    abort_if_attribute_is_empty,
+    abort_if_user_input_is_missing
     )
 
 class ParcelDeliveryOrder(MethodView):
@@ -58,6 +59,7 @@ class ParcelDeliveryOrder(MethodView):
     def put(self):
         abort_if_content_type_is_not_json()
         args = request.get_json()
+        abort_if_user_input_is_missing(args, ['email','id'])
         email = args['email']
         orderId = args['id']
         abort_if_user_does_not_exist(email)
