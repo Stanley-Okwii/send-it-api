@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from flask.views import MethodView
+from werkzeug.security import check_password_hash
 from app.common.store import user_list
 from app.common.util import (
     get_specific_user,
@@ -9,7 +10,11 @@ from app.common.util import (
     response,
     abort_if_content_type_is_not_json,
     abort_if_user_input_is_missing,
-    abort_if_attribute_is_empty
+    abort_if_attribute_is_empty,
+    process_response_data
+    )
+from flask_jwt_extended import (
+    create_access_token
     )
 
 class SignIn(MethodView):
@@ -25,7 +30,13 @@ class SignIn(MethodView):
         abort_if_password_is_less_than_4_characters(password)
         abort_if_user_does_not_exist(email)
         user = get_specific_user(email)
-        if (user['password'] == password):
-            return response('You logged in successfully.', 200)
+        is_password_matched = check_password_hash(user['password'], password)
+        access_token = create_access_token(identity = email)
+        user_response = {
+                'message': 'You logged in successfully.',
+                'user_token': access_token
+                }
+        if is_password_matched:
+            return process_response_data(user_response, 200)
         else:
             return response('Invalid email or password, Please try again', 401)

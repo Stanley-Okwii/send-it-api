@@ -3,8 +3,12 @@ from app.auth.views import Welcome, User, UserList
 from app.common.util import response
 from app.send_it.sign_in import SignIn
 from app.send_it.parcel_delivery import ParcelDeliveryOrder, UserParcelOrder
+from flask_jwt_extended import JWTManager
 
 api = Flask(__name__)
+
+api.config['JWT_SECRET_KEY'] = 'Abracadra'
+jwt = JWTManager(api)
 
 # Register classes as views
 welcome_view = Welcome.as_view('welcome')

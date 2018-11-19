@@ -1,6 +1,8 @@
 from flask import jsonify, request
 from flask.views import MethodView
 from app.common.store import user_list, parcel_delivery_orders
+from werkzeug.security import generate_password_hash
+from flask_jwt_extended import jwt_required
 from app.common.util import (
     response,
     process_response_data,
@@ -19,6 +21,7 @@ class Welcome(MethodView):
         return response("welcome to send it api v1", 200)
 
 class UserList(MethodView):
+    @jwt_required
     def get(self, email):
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
@@ -29,6 +32,7 @@ class UserList(MethodView):
             return response("you do not have permission to access this endpoint", 404)
 
 class User(MethodView):
+    @jwt_required
     def get(self, email):
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
@@ -36,6 +40,7 @@ class User(MethodView):
 
         return process_response_data(response, 200)
 
+    @jwt_required
     def delete(self, email):
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
@@ -44,6 +49,7 @@ class User(MethodView):
 
         return response("user account deleted", 200)
 
+    @jwt_required
     def put(self, email):
         abort_if_content_type_is_not_json
         abort_if_email_does_not_match_type_email(email)
@@ -55,10 +61,11 @@ class User(MethodView):
         abort_if_attribute_is_empty("name", name)
         password = args['password']
         abort_if_password_is_less_than_4_characters(password)
+        hashed_password = generate_password_hash(password)
         newUser = {
             'name': name,
             "email": user["email"],
-            "password": password,
+            "password": hashed_password,
             'role': args['role']
                 if 'role' in args.keys()
                 else user['role'],
@@ -80,7 +87,8 @@ class User(MethodView):
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_already_exists(email)
         abort_if_password_is_less_than_4_characters(password)
-        newUser = { 'name': name, "email": email, "password": password,'role': role }
+        hashed_password = generate_password_hash(password)
+        newUser = { 'name': name, "email": email, "password": hashed_password,'role': role }
         user_list.append(newUser)
         parcel_delivery_orders[newUser["email"]] = []
 

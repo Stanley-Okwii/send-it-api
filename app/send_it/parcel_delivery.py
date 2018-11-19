@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from flask.views import MethodView
+from flask_jwt_extended import jwt_required
 from app.common.store import parcel_delivery_orders
 from app.common.util import (
     get_specific_user,
@@ -19,6 +20,7 @@ from app.common.util import (
     )
 
 class ParcelDeliveryOrder(MethodView):
+    @jwt_required
     def post(self):
         args = request.get_json()
         abort_if_content_type_is_not_json()
@@ -42,6 +44,7 @@ class ParcelDeliveryOrder(MethodView):
 
         return response('parcel delivery order successfully created', 201)
 
+    @jwt_required
     def get(self, email):
         abort_if_attribute_is_empty("email", email)
         abort_if_email_does_not_match_type_email(email)
@@ -56,6 +59,7 @@ class ParcelDeliveryOrder(MethodView):
             abort_if_user_does_not_have_orders(email)
             return process_response_data(parcel_delivery_orders[email], 200)
 
+    @jwt_required
     def put(self):
         abort_if_content_type_is_not_json()
         args = request.get_json()
@@ -90,6 +94,7 @@ class ParcelDeliveryOrder(MethodView):
         return response('parcel has been successfully updated', 201)
 
 class UserParcelOrder(MethodView):
+    @jwt_required
     def get(self, orderId):
         if(len(str(orderId)) > 0 and str(orderId).isnumeric()):
             flattened_list = [parcel_order
@@ -100,4 +105,6 @@ class UserParcelOrder(MethodView):
                 return process_response_data(single_parcel, 200)
             else:
                 return response("parcel order with id {0} does not exist".format(orderId), 404)
+        else:
+            return response("parcel order must be numeric ", 404)
 
