@@ -1,8 +1,14 @@
 from flask import jsonify, request
 from flask.views import MethodView
-from app.common.store import user_list, parcel_delivery_orders
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import jwt_required
+from app.common.store import user_list, parcel_delivery_orders
+from app.db_methods import (
+    register_new_user,
+    update_user_account,
+    delete_user_account,
+    get_all_users
+    )
 from app.common.util import (
     response,
     process_response_data,
@@ -26,8 +32,9 @@ class UserList(MethodView):
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
         user = get_specific_user(email)
+        users = get_all_users()
         if(user['role'] == 'admin'):
-            return process_response_data(user_list, 200)
+            return process_response_data(users, 200)
         else:
             return response("you do not have permission to access this endpoint", 404)
 
@@ -44,8 +51,7 @@ class User(MethodView):
     def delete(self, email):
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
-        user_to_delete = get_specific_user(email)
-        user_list.remove(user_to_delete)
+        delete_user_account(email = email)
 
         return response("user account deleted", 200)
 
@@ -63,14 +69,13 @@ class User(MethodView):
         abort_if_password_is_less_than_4_characters(password)
         hashed_password = generate_password_hash(password)
         newUser = {
-            'name': name,
-            "email": user["email"],
+            'username': name,
             "password": hashed_password,
             'role': args['role']
                 if 'role' in args.keys()
                 else user['role'],
             }
-        user_list[user_list.index(user)] = newUser
+        update_user_account(email = email, data = newUser)
 
         return response("successfully updated account details", 201)
 
@@ -88,8 +93,7 @@ class User(MethodView):
         abort_if_user_already_exists(email)
         abort_if_password_is_less_than_4_characters(password)
         hashed_password = generate_password_hash(password)
-        newUser = { 'name': name, "email": email, "password": hashed_password,'role': role }
-        user_list.append(newUser)
-        parcel_delivery_orders[newUser["email"]] = []
+        newUser = { 'username': name, "email": email, "password": hashed_password, 'role': role }
+        register_new_user(data = newUser)
 
         return response("successfully created new user account", 201)

@@ -33,10 +33,10 @@ class SignIn(MethodView):
         is_password_matched = check_password_hash(user['password'], password)
         access_token = create_access_token(identity = email)
         user_response = {
-                'message': 'You logged in successfully.',
+                'message': 'You have logged in successfully.',
                 'user_token': access_token
                 }
         if is_password_matched:
-            return process_response_data(user_response, 200)
-        else:
             return response('Invalid email or password, Please try again', 401)
+        else:
+            return process_response_data(user_response, 200)
