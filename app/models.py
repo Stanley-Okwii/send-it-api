@@ -1,0 +1,53 @@
+from psycopg2 import connect
+from psycopg2.extras import RealDictCursor
+
+
+class DataModel(object):
+    def __init__(self):
+        """create instance of a connection instance to sendit database"""
+        self.connection = connect(
+            dbname="sendit",
+            user="stanley",
+            host="localhost",
+            password="abracadabra",
+            port="5432"
+        )
+        self.connection.autocommit = True
+        self.cursor = self.connection.cursor()
+        self.dict_cursor = self.connection.cursor(
+            cursor_factory=RealDictCursor
+            )
+
+    def create_user_table(self):
+        """create table to store user information"""
+        user_table_query = "CREATE TABLE IF NOT EXISTS users (email varchar(100) PRIMARY KEY, \
+        username varchar(50), password varchar(256), role varchar(15))"
+
+        self.cursor.execute(user_table_query)
+
+    def create_parcel_order_table(self):
+        """creates table to store parcel orders"""
+        # create_status_enum = "CREATE TYPE status AS ENUM( \
+        #                     'pending', 'delivered', 'cancelled')"
+
+        parcel_order_table_query = "CREATE TABLE IF NOT EXISTS parcel_order(\
+        order_id varchar(100) PRIMARY KEY, parcel varchar(100), weight integer,\
+        price integer, receiver varchar(80), destination varchar(100), \
+        current_location varchar(100), \
+        status varchar(100) NOT NULL DEFAULT 'pending', \
+        FOREIGN KEY (order_id) REFERENCES users (email) ON DELETE RESTRICT)"
+
+        # self.cursor.execute(create_status_enum)
+        self.cursor.execute(parcel_order_table_query)
+
+    def drop_tables(self):
+        """drops/deletes tables"""
+
+        drop_user_table = "DROP TABLE users cascade;"
+        drop_parcel_order_table = "DROP TABLE parcel_order cascade;"
+        self.cursor.execute(drop_user_table)
+        self.cursor.execute(drop_parcel_order_table)
+
+# database_connection = DataModel()
+# database_connection.create_user_table()
+# database_connection.create_parcel_order_table()
