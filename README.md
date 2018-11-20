@@ -24,15 +24,14 @@ This API is hosted at [send-it-api](https://sender-app.herokuapp.com) on [heroku
 ## End points
 ### User
 #### Sign up
-A user can sign up by sending a `POST` request to `/api/v1/user` endpoint with request in `JSON` format. To sign up as admin, "role" should have a value `admin`. 
+A user can sign up by sending a `POST` request to `/api/v1/user` endpoint with request in `JSON` format.
 
 An example would be
 ```json
 {
   "name": "user",
   "email": "user@gmail.com",
-  "password": "123456",
-  "role": "user"
+  "password": "123456"
 }
 ```
 The email should be of a valid email format and the password should contain at least 4 characters.
@@ -71,8 +70,7 @@ To create a parcel a `POST` request is sent to `/api/v1/parcels`. The request da
 
 ```json
 {
-    "email": "user@gmail.com",
-    "id": "991",
+    "email": "hemworth@gmail.com",
     "parcel": "Bit coins",
     "weight": "2",
     "price": "1500",
@@ -95,7 +93,6 @@ A user can get their parcels by sending a `GET` request to `/api/v1/parcels/<ord
 A user can edit their parcels by sending a `PUT` request to `/api/v1/parcels`.The request data will be in the format shown below. Only destination, current_location and status can be updated, the rest of the information concerning a parcel order is maintained. Status of parcel can be `pending`, `delivered` or `cancelled`.
 ```json
 {
-    "email": "user@gmail.com",
     "id": "991",
     "destination": "Kireka",
     "current_location": "kampala road",

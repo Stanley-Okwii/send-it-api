@@ -27,8 +27,8 @@ def abort_if_user_does_not_exist(email):
     query = "SELECT * FROM users WHERE email='{0}'".format(email)
     dictcur.execute(query)
     user = dictcur.fetchone()
-    if user == False:
-        abort(make_response(jsonify(message="user doesn't exist".format(email)), 404))
+    if not user:
+        abort(make_response(jsonify(message="user doesn't exist"), 404))
 
 def abort_if_email_does_not_match_type_email(email):
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
@@ -41,8 +41,22 @@ def abort_if_password_is_less_than_4_characters(password):
 def get_specific_parcel(email, orderId):
     return next((item for item in parcel_delivery_orders[email] if item["id"] == orderId), False)
 
-def abort_if_parcel_does_not_exist(email, orderId):
-    parcel = get_specific_parcel(email, orderId)
+def get_parcels_by_email(email):
+    query = "SELECT * FROM parcel_order WHERE email='{0}'".format(email)
+    dictcur.execute(query)
+    parcel_order = dictcur.fetchall()
+
+    return parcel_order
+
+def get_specific_parcel_by_id(orderId):
+    query = "SELECT * FROM parcel_order WHERE order_id='{0}'".format(orderId)
+    dictcur.execute(query)
+    parcel_order = dictcur.fetchone()
+
+    return parcel_order
+
+def abort_if_parcel_does_not_exist(orderId):
+    parcel = get_specific_parcel_by_id(orderId)
     if parcel == False:
         abort(make_response(jsonify(message="parcel order with id {0} does not exist".format(orderId)), 404))
 
@@ -60,7 +74,7 @@ def abort_if_user_already_exists(email):
         abort(make_response(jsonify(message="user already exists"), 400))
 
 def abort_if_parcel_input_is_missing(parameter):
-    parcel_details = ["email", "id", "parcel","weight", "price", "receiver", "pickup_location", "destination"]
+    parcel_details = ["email", "parcel","weight", "price", "receiver", "pickup_location", "destination"]
     user_provided_attributes = parameter.keys()
     missing_attributes = list(set(parcel_details) - set(user_provided_attributes))
     if len(missing_attributes) > 0:
@@ -86,3 +100,11 @@ def abort_if_user_input_is_missing(parameter, details):
         abort(make_response(jsonify(
             message="attribute(s): {0} are missing".format(", ".join(missing_attributes))),
             400))
+
+def abort_if_username_exists(username):
+    query = "SELECT * FROM users WHERE username='{}'".format(username)
+    dictcur.execute(query)
+    user_name_exists = dictcur.fetchone()
+
+    if user_name_exists:
+        abort(make_response(jsonify(message="username already exists"), 400))

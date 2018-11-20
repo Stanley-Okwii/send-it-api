@@ -1,5 +1,5 @@
 from flask import Flask
-from app.auth.views import Welcome, User, UserList
+from app.auth.views import Welcome, User, UserList, Admin
 from app.common.util import response
 from app.send_it.sign_in import SignIn
 from app.send_it.parcel_delivery import ParcelDeliveryOrder, UserParcelOrder
@@ -13,6 +13,7 @@ jwt = JWTManager(api)
 # Register classes as views
 welcome_view = Welcome.as_view('welcome')
 user_view = User.as_view('user')
+admin_view = Admin.as_view('admin')
 user_list_view = UserList.as_view('user_list')
 sign_in_view = SignIn.as_view('sign_in')
 parcel_delivery_order_view = ParcelDeliveryOrder.as_view('parcel_delivery_order')
@@ -54,4 +55,8 @@ api.add_url_rule(
     "/api/v1/parcels/<orderId>",
     view_func=user_parcel_order_view,
     methods=['GET']
+    )
+api.add_url_rule("/api/v1/role",
+    view_func=admin_view,
+    methods=['PUT']
     )

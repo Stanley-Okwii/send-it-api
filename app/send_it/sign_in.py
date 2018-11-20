@@ -1,7 +1,6 @@
 from flask import jsonify, request
 from flask.views import MethodView
 from werkzeug.security import check_password_hash
-from app.common.store import user_list
 from app.common.util import (
     get_specific_user,
     abort_if_user_does_not_exist,
@@ -31,7 +30,7 @@ class SignIn(MethodView):
         abort_if_user_does_not_exist(email)
         user = get_specific_user(email)
         is_password_matched = check_password_hash(user['password'], password)
-        access_token = create_access_token(identity = email)
+        access_token = create_access_token(identity = user)
         user_response = {
                 'message': 'You have logged in successfully.',
                 'user_token': access_token
