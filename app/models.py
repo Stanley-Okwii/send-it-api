@@ -50,6 +50,6 @@ class DataModel(object):
         self.cursor.execute(drop_parcel_order_table)
 
 database_connection = DataModel()
-database_connection.create_user_table()
-database_connection.create_parcel_order_table()
+# database_connection.create_user_table()
+# database_connection.create_parcel_order_table()
 # database_connection.drop_tables()

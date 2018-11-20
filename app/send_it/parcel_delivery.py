@@ -45,10 +45,7 @@ class ParcelDeliveryOrder(MethodView):
         return response('parcel delivery order successfully created', 201)
 
     @jwt_required
-    def get(self):
-        args = request.get_json()
-        abort_if_content_type_is_not_json()
-        email = args['email']
+    def get(self, email):
         abort_if_attribute_is_empty("email", email)
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
