@@ -11,7 +11,6 @@ before_script:
 
 before_install:
   - export APP_SETTINGS="app.config.TestingConfig"
-  - export DATABASE_URL="postgresql://postgres@localhost/sendit_test"
 
 install:
   - pip install -r requirements.txt

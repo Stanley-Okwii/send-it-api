@@ -10,6 +10,10 @@ A set of API endpoints to provide and manipulate data for the SendIT courier ser
 ## Test Project 
 This API is hosted at [send-it-api](https://sender-app.herokuapp.com) on [heroku](heroku.com)
 
+## Dependencies
+Flask 1.0.2
+Python 3.6.1
+
 ## Features
  - Create a user account
  - Update account user name, password and role
@@ -100,20 +104,9 @@ A user can edit their parcels by sending a `PUT` request to `/api/v1/parcels`.Th
 }
 ```
 
-### Running tests without coverage
-Run the tests from the terminal
-```console
-user@user:~$ pytest tests
-```
+## Issues, suggestions and feature requests
+This api is actively under maintenance, please report any issues or suggestion for improvement at  
+https://github.com/Stanley-Okwii/send-it-api/issues
 
-### Running tests with coverage
-Run tests with coverage by running this command in the terminal
-```console
-user@user:~$ pytest tests --cov=app --cov-report term-missing
-```
-
-### Running tests with coverage as html output
-Run tests with an html code coverage output
-```console
-user@user:~$ pytest tests --cov=app --cov-report html --cov-report term-missing
-```
+## Development and contribution
+Please follow [development guide](/development.md)
