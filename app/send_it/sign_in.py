@@ -28,13 +28,16 @@ class SignIn(MethodView):
         abort_if_password_is_less_than_4_characters(password)
         abort_if_user_does_not_exist(email)
         user = get_specific_user(email)
-        access_token = create_access_token(identity = user)
+        user_identity = {
+            'name': user['username'],
+            'email': user['email'],
+            'role': user['role']
+            }
+        access_token = create_access_token(identity = user_identity)
         user_response = {
                 'message': 'You have logged in successfully.',
                 'user_token': access_token
                 }
-        print(password)
-        print(user['password'])
         if user['password'] == password:
             return process_response_data(user_response, 200)
         else:

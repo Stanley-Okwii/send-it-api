@@ -11,7 +11,7 @@ A set of API endpoints to provide and manipulate data for the SendIT courier ser
 This API is hosted at [send-it-api](https://sender-app.herokuapp.com) on [heroku](heroku.com)
 
 ## Dependencies
-Flask 1.0.2
+Flask 1.0.2  
 Python 3.6.1
 
 ## Features

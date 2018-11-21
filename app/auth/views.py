@@ -27,9 +27,7 @@ class Welcome(MethodView):
 
 class UserList(MethodView):
     @jwt_required
-    def get(self, email):
-        abort_if_email_does_not_match_type_email(email)
-        abort_if_user_does_not_exist(email)
+    def get(self):
         user = get_jwt_identity()
         users = get_all_users()
         if(user['role'] == 'admin'):
@@ -41,13 +39,13 @@ class UserList(MethodView):
 class Admin(MethodView):
     @jwt_required
     def put(self):
-        args = request.get_json()
-        abort_if_user_input_is_missing(args, ["email", "role"])
+        arguments = request.get_json()
+        abort_if_user_input_is_missing(arguments, ["email", "role"])
         abort_if_content_type_is_not_json
-        email = args['email']
+        email = arguments['email']
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
-        role = args['role']
+        role = arguments['role']
         abort_if_attribute_is_empty("role", role)
         user = get_jwt_identity()
         if(user['role']=='admin'):
@@ -63,48 +61,44 @@ class Admin(MethodView):
 
 class User(MethodView):
     @jwt_required
-    def get(self, email):
-        abort_if_email_does_not_match_type_email(email)
-        abort_if_user_does_not_exist(email)
-        response = get_specific_user(email)
+    def get(self):
+        user = get_jwt_identity()
+        response = get_specific_user(user['email'])
 
         return process_response_data(response, 200)
 
     @jwt_required
-    def delete(self, email):
-        abort_if_email_does_not_match_type_email(email)
-        abort_if_user_does_not_exist(email)
-        delete_user_account(email = email)
+    def delete(self):
+        user = get_jwt_identity()
+        delete_user_account(email = user['email'])
 
         return response("user account deleted", 200)
 
     @jwt_required
-    def put(self, email):
-        abort_if_content_type_is_not_json
-        abort_if_email_does_not_match_type_email(email)
-        abort_if_user_does_not_exist(email)
-        # user = get_specific_user(email)
-        args = request.get_json()
-        abort_if_user_input_is_missing(args, ["name", "password"])
-        name = args['name']
+    def put(self):
+        user = get_jwt_identity()
+        abort_if_content_type_is_not_json()
+        arguments = request.get_json()
+        abort_if_user_input_is_missing(arguments, ["name", "password"])
+        name = arguments['name']
         abort_if_attribute_is_empty("name", name)
-        password = args['password']
+        password = arguments['password']
         abort_if_password_is_less_than_4_characters(password)
         newUser = {
             'username': name,
             "password": password
             }
-        update_user_account(email = email, data = newUser)
+        update_user_account(email = user['email'], data = newUser)
 
         return response("successfully updated account details", 201)
 
     def post(self):
         abort_if_content_type_is_not_json()
-        args = request.get_json()
-        abort_if_user_input_is_missing(args, ["name","email","password"])
-        name = args['name']
-        email = args['email']
-        password = args['password']
+        arguments = request.get_json()
+        abort_if_user_input_is_missing(arguments, ["name","email","password"])
+        name = arguments['name']
+        email = arguments['email']
+        password = arguments['password']
         abort_if_attribute_is_empty("name", name)
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_already_exists(email, name)
@@ -117,4 +111,4 @@ class User(MethodView):
         newUser = { 'username': name, "email": email, "password": password, 'role': role }
         register_new_user(data = newUser)
 
-        return response("successfully created new user account", 201)
+        return response("successfully created new account", 201)

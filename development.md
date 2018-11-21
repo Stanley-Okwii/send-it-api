@@ -1,6 +1,6 @@
 # Development and contribution
 ## Prerequisites
-    - Install git, pip and postgreSQL
+    - Install git, pip, virtualenv and postgreSQL
 
 ## To contribute, fork and clone.  
 ```console

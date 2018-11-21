@@ -9,11 +9,11 @@ class DataModel(object):
         """create instance of a connection instance to sendit database"""
         # if app_config['testing']:
         #     self.connection = connect(app_config['testing'].DATABASE_URL)
-        # if app_config['development']:
-            # self.connection = connect(app_config['development'].DATABASE_URL)
+        if app_config['development']:
+            self.connection = connect(app_config['development'].DATABASE_URL)
         # elif app_config['production']:
         #     self.connection = connect(app_config['production'].DATABASE_URL)
-        self.connection = connect(database="sendit_test")
+        # self.connection = connect(database="sendit_test")
 
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
@@ -48,4 +48,3 @@ class DataModel(object):
         drop_parcel_order_table = "DROP TABLE parcel_order cascade;"
         self.cursor.execute(drop_user_table)
         self.cursor.execute(drop_parcel_order_table)
-

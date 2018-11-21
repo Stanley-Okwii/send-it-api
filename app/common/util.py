@@ -13,7 +13,9 @@ def response(message, status):
         })), status
 
 def process_response_data(message, status):
-    return make_response(jsonify(message)), status
+    return make_response(jsonify({
+        'data': message
+        })), status
 
 def get_specific_user(email):
     query = "SELECT * FROM users WHERE email='{0}'".format(email)
@@ -35,7 +37,7 @@ def abort_if_email_does_not_match_type_email(email):
 
 def abort_if_password_is_less_than_4_characters(password):
     if (len(str(password)) < 4):
-        abort(make_response(jsonify(message="password is missing or less than 4 characters"), 400))
+        abort(make_response(jsonify(message="password less than 4 characters"), 400))
 
 def get_parcels_by_email(email):
     query = "SELECT * FROM parcel_order WHERE email='{0}'".format(email)
@@ -74,7 +76,7 @@ def abort_if_user_already_exists(email, username):
         abort(make_response(jsonify(message="user already exists"), 400))
 
 def abort_if_parcel_input_is_missing(parameter):
-    parcel_details = ["email", "parcel","weight", "price", "receiver", "pickup_location", "destination"]
+    parcel_details = ["parcel","weight", "price", "receiver", "pickup_location", "destination"]
     user_provided_attributes = parameter.keys()
     missing_attributes = list(set(parcel_details) - set(user_provided_attributes))
     if len(missing_attributes) > 0:
@@ -101,3 +103,10 @@ def abort_if_user_input_is_missing(parameter, details):
             message="attribute(s): {0} are missing".format(", ".join(missing_attributes))),
             400))
 
+def abort_if_user_does_not_own_order(email, orderId):
+    query = "SELECT * FROM parcel_order WHERE order_id='{0}' AND email='{1}'".format(orderId, email)
+    dictcur.execute(query)
+    parcel_order = dictcur.fetchone()
+
+    if not parcel_order:
+        abort(make_response(jsonify(message="you are not authorized to edit order"), 404))
