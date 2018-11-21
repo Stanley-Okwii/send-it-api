@@ -7,12 +7,13 @@ from psycopg2.extras import RealDictCursor
 class DataModel(object):
     def __init__(self):
         """create instance of a connection instance to sendit database"""
-        if app_config['testing']:
-            self.connection = connect(app_config['testing'].DATABASE_URL)
-        # elif app_config['development']:
-        #     self.connection = connect(app_config['development'].DATABASE_URL)
+        # if app_config['testing']:
+        #     self.connection = connect(app_config['testing'].DATABASE_URL)
+        # if app_config['development']:
+            # self.connection = connect(app_config['development'].DATABASE_URL)
         # elif app_config['production']:
         #     self.connection = connect(app_config['production'].DATABASE_URL)
+        self.connection = connect(database="sendit_test")
 
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()

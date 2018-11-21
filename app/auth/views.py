@@ -18,7 +18,6 @@ from app.common.util import (
     abort_if_user_already_exists,
     abort_if_attribute_is_empty,
     abort_if_user_input_is_missing,
-    abort_if_username_exists,
     abort_if_content_type_is_not_json
     )
 
@@ -84,7 +83,7 @@ class User(MethodView):
         abort_if_content_type_is_not_json
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
-        user = get_specific_user(email)
+        # user = get_specific_user(email)
         args = request.get_json()
         abort_if_user_input_is_missing(args, ["name", "password"])
         name = args['name']
@@ -107,9 +106,8 @@ class User(MethodView):
         email = args['email']
         password = args['password']
         abort_if_attribute_is_empty("name", name)
-        abort_if_username_exists(name)
         abort_if_email_does_not_match_type_email(email)
-        abort_if_user_already_exists(email)
+        abort_if_user_already_exists(email, name)
         abort_if_password_is_less_than_4_characters(password)
         if email == 'admin@gmail.com':
             role = 'admin'

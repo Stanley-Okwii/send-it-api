@@ -19,10 +19,9 @@ def register_new_user(data):
 
 def update_user_account(data, email):
     """update user information"""
-    query = "UPDATE users SET username='{0}', password='{1}', role='{2}' WHERE email='{3}'".format(
+    query = "UPDATE users SET username='{0}', password='{1}' WHERE email='{2}'".format(
             data['username'],
             data['password'],
-            data['role'],
             email
         )
     cursor.execute(query)

@@ -51,11 +51,16 @@ class BaseTestCase(TestCase):
                 ))
             )
 
-    def get_token(self, email, password):
+    def get_token(self, name, email, password, role):
         """
         Get a user token
         :return:
         """
+        self.client.post(
+            'api/v1/user',
+            content_type='application/json',
+            data=json.dumps(dict(name=name, email=email, password=password, role= role))
+            )
         response = self.client.post(
             'api/v1/auth/signin',
             content_type = 'application/json',

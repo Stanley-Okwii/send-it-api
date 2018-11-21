@@ -2,7 +2,7 @@ from tests.base import BaseTestCase
 import json
 import pytest
 
-class TestAuth(BaseTestCase):
+class TestViews(BaseTestCase):
     def test_show_welcome_message(self):
         """
         Test that api displays welcome message
@@ -31,10 +31,10 @@ class TestAuth(BaseTestCase):
             self.assertTrue(data['message'] == 'successfully created new user account')
             self.assertEqual(response.status_code, 201)
 
-    # @pytest.mark.skip(reason="test later")
-    def register_and_login_a_user(self):
+    @pytest.mark.skip(reason="test later")
+    def Test_to_generate_a_user_token(self):
         """
-        Test a user can create an admin account
+        Test to generate a user token
         :return:
         """
         with self.client:
@@ -46,54 +46,58 @@ class TestAuth(BaseTestCase):
             )
             data = response.get_json()
             token = data['user_token']
-            print(token)
             self.assertTrue(data['message'] == 'You have logged in successfully.')
             self.assertEqual(response.status_code, 200)
+            return token
 
-    @pytest.mark.skip(reason="test later")
+
+    # @pytest.mark.skip(reason="test later")
     def test_to_show_all_registered_users(self):
         """
         Test to fetch all users by an admin
         :return:
         """
         with self.client:
-            self
+            token = self.get_token("admin","admin@gmail.com","00000", "admin")
             response = self.client.get(
                 'api/v1/users/admin@gmail.com',
-                content_type='application/json'
+                content_type='application/json',
+                headers=dict(Authorization='Bearer ' + token)
             )
             self.assertEqual(response.status_code, 200)
 
 
 
-    @pytest.mark.skip(reason="test later")
+    # @pytest.mark.skip(reason="test later")
     def test_user_who_is_not_admin_can_not_view_users_list(self):
         """
         Test a user who is not admin can not view users list
         :return:
         """
         with self.client:
-            self.register_new_user("arnold","arnold@gmail.com","000000", "user")
+            token = self.get_token("arnold","arnold@gmail.com","000000", "user")
             response = self.client.get(
                 'api/v1/users/arnold@gmail.com',
-                content_type='application/json'
+                content_type='application/json',
+                headers=dict(Authorization='Bearer ' + token)
             )
             data = response.get_json()
 
             self.assertTrue(data['message'] == 'you do not have permission to access this endpoint')
             self.assertEqual(response.status_code, 404)
 
-    @pytest.mark.skip(reason="test later")
+    # @pytest.mark.skip(reason="test later")
     def test_update_of_user_information(self):
         """
         Test a user can update their account name, role and password
         :return:
         """
         with self.client:
-            self.register_new_user("joyce","joyce@gmail.com","000000", "user")
+            token = self.get_token("joyce","joyce@gmail.com","000000", "user")
             response = self.client.put(
                 'api/v1/user/joyce@gmail.com',
                 content_type= "application/json",
+                headers=dict(Authorization='Bearer ' + token),
                 data=json.dumps(dict(name="superstar", password="007007"))
             )
             response_data = json.loads(response.data.decode())
@@ -108,8 +112,10 @@ class TestAuth(BaseTestCase):
         :return:
         """
         with self.client:
+            token = self.get_token("stanley","stanley@gmail.com","000000", "user")
             response = self.client.delete(
-                'api/v1/user/stanley@gmail.com'
+                'api/v1/user/stanley@gmail.com',
+                headers=dict(Authorization='Bearer ' + token),
             )
             response_data = json.loads(response.data.decode())
 

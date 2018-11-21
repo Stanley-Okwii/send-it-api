@@ -65,9 +65,12 @@ def abort_if_attribute_is_empty(attribute, value):
     if value == "" or not value:
         abort(make_response(jsonify(message="attribute {0} or its value is missing".format(attribute)), 400))
 
-def abort_if_user_already_exists(email):
+def abort_if_user_already_exists(email, username):
+    query = "SELECT * FROM users WHERE username='{}'".format(username)
+    dictcur.execute(query)
+    user_name_exists = dictcur.fetchone()
     user_exists = get_specific_user(email)
-    if user_exists:
+    if user_exists or user_name_exists:
         abort(make_response(jsonify(message="user already exists"), 400))
 
 def abort_if_parcel_input_is_missing(parameter):
@@ -98,10 +101,3 @@ def abort_if_user_input_is_missing(parameter, details):
             message="attribute(s): {0} are missing".format(", ".join(missing_attributes))),
             400))
 
-def abort_if_username_exists(username):
-    query = "SELECT * FROM users WHERE username='{}'".format(username)
-    dictcur.execute(query)
-    user_name_exists = dictcur.fetchone()
-
-    if user_name_exists:
-        abort(make_response(jsonify(message="username already exists"), 400))

@@ -1,27 +1,25 @@
 from tests.base import BaseTestCase
 import json
-import pytest
 
 class TestSignIn(BaseTestCase):
-    @pytest.mark.skip(reason="test later")
     def test_user_can_login_successfully(self):
         """
         Test that a user can login with correct password and email
         :return:
         """
         with self.client:
-            self.register_new_user("user","user@gmail.com", "00000", "user")
+            self.register_new_user("user2","user2@gmail.com", "00000", "user")
             response = self.client.post(
                 'api/v1/auth/signin',
                 content_type='application/json',
-                data=json.dumps(dict(email="user@gmail.com", password="00000"))
+                data=json.dumps(dict(email="user2@gmail.com", password="00000"))
             )
             data = json.loads(response.data.decode())
 
-            self.assertTrue(data['message'] == 'You logged in successfully.')
+            self.assertTrue(data['message'] == 'You have logged in successfully.')
             self.assertEqual(response.status_code, 200)
 
-    @pytest.mark.skip(reason="test later")
+
     def test_user_login_with_incorrect_password(self):
         """
         Test that user can not log in with wrong password
