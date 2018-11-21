@@ -13,7 +13,6 @@ class DevelopmentConfig(Config):
     DATABASE_URL="postgresql://stanley:abracadabra@localhost/sendit"
 
 
-
 class TestingConfig(Config):
     """
     Testing configuration

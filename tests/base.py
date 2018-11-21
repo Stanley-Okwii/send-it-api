@@ -16,8 +16,9 @@ class BaseTestCase(TestCase):
         return api
 
     def setUp(self):
-        db.create_user_table()
-        db.create_parcel_order_table()
+        pass
+        # db.create_user_table()
+        # db.create_parcel_order_table()
 
     def tearDown(self):
         db.drop_tables()

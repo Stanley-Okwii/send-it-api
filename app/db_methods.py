@@ -1,5 +1,5 @@
 from app.models import DataModel
-from werkzeug.security import generate_password_hash, check_password_hash
+# from werkzeug.security import generate_password_hash, check_password_hash
 
 db_connect = DataModel()
 cursor = db_connect.cursor
@@ -12,7 +12,7 @@ def register_new_user(data):
         VALUES('{0}', '{1}', '{2}', '{3}')".format(
             data['username'],
             data['email'],
-            generate_password_hash(data['password']),
+            data['password'],
             data['role']
         )
     cursor.execute(query)
@@ -21,7 +21,7 @@ def update_user_account(data, email):
     """update user information"""
     query = "UPDATE users SET username='{0}', password='{1}', role='{2}' WHERE email='{3}'".format(
             data['username'],
-            generate_password_hash(data['password']),
+            data['password'],
             data['role'],
             email
         )

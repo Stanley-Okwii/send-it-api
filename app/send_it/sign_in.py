@@ -1,6 +1,5 @@
 from flask import jsonify, request
 from flask.views import MethodView
-from werkzeug.security import check_password_hash
 from app.common.util import (
     get_specific_user,
     abort_if_user_does_not_exist,
@@ -29,13 +28,14 @@ class SignIn(MethodView):
         abort_if_password_is_less_than_4_characters(password)
         abort_if_user_does_not_exist(email)
         user = get_specific_user(email)
-        is_password_matched = check_password_hash(user['password'], password)
         access_token = create_access_token(identity = user)
         user_response = {
                 'message': 'You have logged in successfully.',
                 'user_token': access_token
                 }
-        if is_password_matched:
-            return response('Invalid email or password, Please try again', 401)
-        else:
+        print(password)
+        print(user['password'])
+        if user['password'] == password:
             return process_response_data(user_response, 200)
+        else:
+            return response('Invalid email or password, Please try again', 401)

@@ -1,6 +1,5 @@
 from flask import jsonify, request
 from flask.views import MethodView
-from werkzeug.security import generate_password_hash
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.db_methods import (
     register_new_user,
@@ -92,10 +91,9 @@ class User(MethodView):
         abort_if_attribute_is_empty("name", name)
         password = args['password']
         abort_if_password_is_less_than_4_characters(password)
-        hashed_password = generate_password_hash(password)
         newUser = {
             'username': name,
-            "password": hashed_password
+            "password": password
             }
         update_user_account(email = email, data = newUser)
 
@@ -113,13 +111,12 @@ class User(MethodView):
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_already_exists(email)
         abort_if_password_is_less_than_4_characters(password)
-        hashed_password = generate_password_hash(password)
         if email == 'admin@gmail.com':
             role = 'admin'
         else:
             role = 'user'
 
-        newUser = { 'username': name, "email": email, "password": hashed_password, 'role': role }
+        newUser = { 'username': name, "email": email, "password": password, 'role': role }
         register_new_user(data = newUser)
 
         return response("successfully created new user account", 201)

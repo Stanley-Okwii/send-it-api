@@ -1,4 +1,3 @@
-# from app import api
 from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 

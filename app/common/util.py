@@ -1,5 +1,5 @@
 from app.models import DataModel
-from werkzeug.security import generate_password_hash, check_password_hash
+# from werkzeug.security import generate_password_hash, check_password_hash
 from flask import abort, jsonify, make_response, request
 import re
 
@@ -66,8 +66,8 @@ def abort_if_attribute_is_empty(attribute, value):
         abort(make_response(jsonify(message="attribute {0} or its value is missing".format(attribute)), 400))
 
 def abort_if_user_already_exists(email):
-    user = get_specific_user(email)
-    if user:
+    user_exists = get_specific_user(email)
+    if user_exists:
         abort(make_response(jsonify(message="user already exists"), 400))
 
 def abort_if_parcel_input_is_missing(parameter):
