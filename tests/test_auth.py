@@ -18,7 +18,7 @@ class TestAuth(BaseTestCase):
             self.assertTrue(response_data['message'] == "welcome to send it api v1")
             self.assertEqual(response.status_code, 200)
 
-    @pytest.mark.skip(reason="test later")
+    # @pytest.mark.skip(reason="test later")
     def test_register_new_user(self):
         """
         Test a user can create an account
@@ -31,22 +31,24 @@ class TestAuth(BaseTestCase):
             self.assertTrue(data['message'] == 'successfully created new user account')
             self.assertEqual(response.status_code, 201)
 
-    @pytest.mark.skip(reason="test later")
-    def test_register_new_admin(self):
+    # @pytest.mark.skip(reason="test later")
+    def register_and_login_a_user(self):
         """
         Test a user can create an admin account
         :return:
         """
         with self.client:
-            response = self.register_new_user("admin","admin@gmail.com","123456", "admin")
-            # self.client.put(
-            #     '/api/v1/role',
-
-            # )
+            self.register_new_user("user","user@gmail.com","00000", "user")
+            response = self.client.post(
+                'api/v1/auth/signin',
+                content_type='application/json',
+                data=json.dumps(dict(email="user@gmail.com", password="00000"))
+            )
             data = response.get_json()
-
-            self.assertTrue(data['message'] == 'successfully created new user account')
-            self.assertEqual(response.status_code, 201)
+            token = data['user_token']
+            print(token)
+            self.assertTrue(data['message'] == 'You have logged in successfully.')
+            self.assertEqual(response.status_code, 200)
 
     @pytest.mark.skip(reason="test later")
     def test_to_show_all_registered_users(self):

@@ -5,7 +5,6 @@ import json
 
 db = DataModel()
 
-
 class BaseTestCase(TestCase):
     def create_app(self):
         """
@@ -16,9 +15,8 @@ class BaseTestCase(TestCase):
         return api
 
     def setUp(self):
-        pass
-        # db.create_user_table()
-        # db.create_parcel_order_table()
+        db.create_user_table()
+        db.create_parcel_order_table()
 
     def tearDown(self):
         db.drop_tables()

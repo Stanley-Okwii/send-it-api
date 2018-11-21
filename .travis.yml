@@ -7,10 +7,11 @@ services:
   - postgresql
 
 before_script:
-  - psql -c 'create database send_it_test;' -U postgres
+  - psql -c 'create database sendit_test;' -U postgres
 
 before_install:
   - export APP_SETTINGS="app.config.TestingConfig"
+  - export DATABASE_URL="postgresql://postgres@localhost/sendit_test"
 
 install:
   - pip install -r requirements.txt
