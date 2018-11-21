@@ -1,4 +1,3 @@
-from app.common.store import user_list, parcel_delivery_orders
 from app.models import DataModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import abort, jsonify, make_response, request
@@ -38,9 +37,6 @@ def abort_if_password_is_less_than_4_characters(password):
     if (len(str(password)) < 4):
         abort(make_response(jsonify(message="password is missing or less than 4 characters"), 400))
 
-def get_specific_parcel(email, orderId):
-    return next((item for item in parcel_delivery_orders[email] if item["id"] == orderId), False)
-
 def get_parcels_by_email(email):
     query = "SELECT * FROM parcel_order WHERE email='{0}'".format(email)
     dictcur.execute(query)
@@ -61,7 +57,8 @@ def abort_if_parcel_does_not_exist(orderId):
         abort(make_response(jsonify(message="parcel order with id {0} does not exist".format(orderId)), 404))
 
 def abort_if_user_does_not_have_orders(email):
-    if (len(parcel_delivery_orders[email]) == 0):
+    parcel_order = get_parcels_by_email(email)
+    if parcel_order == False:
         abort(make_response(jsonify(message="user does not have any orders"), 404))
 
 def abort_if_attribute_is_empty(attribute, value):

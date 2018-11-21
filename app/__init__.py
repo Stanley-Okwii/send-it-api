@@ -1,5 +1,7 @@
+import os
 from flask import Flask
 from app.auth.views import Welcome, User, UserList, Admin
+from app.models import DataModel
 from app.common.util import response
 from app.send_it.sign_in import SignIn
 from app.send_it.parcel_delivery import ParcelDeliveryOrder, UserParcelOrder
@@ -7,8 +9,19 @@ from flask_jwt_extended import JWTManager
 
 api = Flask(__name__)
 
-api.config['JWT_SECRET_KEY'] = 'Abracadra'
+api.config['JWT_SECRET_KEY'] = 'Abracadabra'
 jwt = JWTManager(api)
+
+# app configuration
+app_settings = os.getenv(
+    'APP_SETTINGS',
+    'app.config.DevelopmentConfig'
+)
+api.config.from_object(app_settings)
+
+db =  DataModel()
+db.create_user_table()
+db.create_parcel_order_table()
 
 # Register classes as views
 welcome_view = Welcome.as_view('welcome')

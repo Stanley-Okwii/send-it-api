@@ -114,7 +114,12 @@ class User(MethodView):
         abort_if_user_already_exists(email)
         abort_if_password_is_less_than_4_characters(password)
         hashed_password = generate_password_hash(password)
-        newUser = { 'username': name, "email": email, "password": hashed_password, 'role': 'user' }
+        if email == 'admin@gmail.com':
+            role = 'admin'
+        else:
+            role = 'user'
+
+        newUser = { 'username': name, "email": email, "password": hashed_password, 'role': role }
         register_new_user(data = newUser)
 
         return response("successfully created new user account", 201)

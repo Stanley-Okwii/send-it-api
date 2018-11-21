@@ -1,3 +1,4 @@
+# from app import api
 from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 
@@ -5,13 +6,7 @@ from psycopg2.extras import RealDictCursor
 class DataModel(object):
     def __init__(self):
         """create instance of a connection instance to sendit database"""
-        self.connection = connect(
-            dbname="sendit",
-            user="stanley",
-            host="localhost",
-            password="abracadabra",
-            port="5432"
-        )
+        self.connection = connect('postgresql://stanley:abracadabra@localhost/sendit')
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
         self.dict_cursor = self.connection.cursor(
@@ -27,8 +22,6 @@ class DataModel(object):
 
     def create_parcel_order_table(self):
         """creates table to store parcel orders"""
-        # create_status_enum = "CREATE TYPE status AS ENUM( \
-        #                     'pending', 'delivered', 'cancelled')"
 
         parcel_order_table_query = "CREATE TABLE IF NOT EXISTS parcel_order(\
         order_id serial PRIMARY KEY, parcel varchar(100), weight integer,\
@@ -38,7 +31,6 @@ class DataModel(object):
         email varchar(100), \
         FOREIGN KEY (email) REFERENCES users (email) ON DELETE CASCADE)"
 
-        # self.cursor.execute(create_status_enum)
         self.cursor.execute(parcel_order_table_query)
 
     def drop_tables(self):
@@ -49,7 +41,3 @@ class DataModel(object):
         self.cursor.execute(drop_user_table)
         self.cursor.execute(drop_parcel_order_table)
 
-database_connection = DataModel()
-# database_connection.create_user_table()
-# database_connection.create_parcel_order_table()
-# database_connection.drop_tables()

@@ -9,11 +9,12 @@ services:
 before_script:
   - psql -c 'create database send_it_test;' -U postgres
 
+before_install:
+  - export APP_SETTINGS="app.config.TestingConfig"
+
 install:
   - pip install -r requirements.txt
-  - pip install coverage
   - pip install coveralls
-  - pip install pytest
 
 script:
   - pytest --cov=app tests/

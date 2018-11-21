@@ -13,7 +13,7 @@ def register_new_user(data):
             data['username'],
             data['email'],
             generate_password_hash(data['password']),
-            "user"
+            data['role']
         )
     cursor.execute(query)
 

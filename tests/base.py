@@ -1,6 +1,9 @@
 from app import api
+from app.models import DataModel
 from flask_testing import TestCase
 import json
+
+db = DataModel()
 
 
 class BaseTestCase(TestCase):
@@ -9,13 +12,15 @@ class BaseTestCase(TestCase):
         Create an instance of the app
         :return:
         """
+        api.config.from_object('app.config.TestingConfig')
         return api
 
     def setUp(self):
-        pass
+        db.create_user_table()
+        db.create_parcel_order_table()
 
     def tearDown(self):
-        pass
+        db.drop_tables()
 
     def register_new_user(self, name, email, password, role):
         """
@@ -28,9 +33,9 @@ class BaseTestCase(TestCase):
             data=json.dumps(dict(name=name, email=email, password=password, role= role))
             )
 
-    def create_new_parcel_delivery_order(self, email,_id,parcel,weight,price,receiver,pickup_location,destination):
+    def create_new_parcel_delivery_order(self, email,parcel,weight,price,receiver,pickup_location,destination):
         """
-        Helper method for registering a user with test data
+        Helper method for creating a parcel
         :return:
         """
         return self.client.post(
@@ -38,7 +43,6 @@ class BaseTestCase(TestCase):
             content_type = 'application/json',
             data = json.dumps(dict(
                 email=email,
-                id=_id,
                 parcel=parcel,
                 weight=weight,
                 price=price,
@@ -47,3 +51,17 @@ class BaseTestCase(TestCase):
                 destination=destination
                 ))
             )
+
+    def get_token(self, email, password):
+        """
+        Get a user token
+        :return:
+        """
+        response = self.client.post(
+            'api/v1/auth/signin',
+            content_type = 'application/json',
+            data = json.dumps(dict(
+                email=email,
+                password=password
+            )))
+        return json.loads(response.data.decode())['user_token']
