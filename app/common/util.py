@@ -29,7 +29,7 @@ def abort_if_user_does_not_exist(email):
     dictcur.execute(query)
     user = dictcur.fetchone()
     if not user:
-        abort(make_response(jsonify(message="user doesn't exist"), 404))
+        abort(make_response(jsonify(message="user doesn't exist"), 400))
 
 def abort_if_email_does_not_match_type_email(email):
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):

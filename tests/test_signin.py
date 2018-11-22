@@ -16,7 +16,7 @@ class TestSignIn(BaseTestCase):
             )
             data = json.loads(response.data.decode())
 
-            self.assertTrue(data['message'] == 'You have logged in successfully.')
+            self.assertTrue(data['data']['message'] == 'You have logged in successfully.')
             self.assertEqual(response.status_code, 200)
 
 

@@ -86,7 +86,6 @@ api.add_url_rule(
     view_func=parcel_status_view,
     methods=['PUT']
     )
-parcel_status_view
 api.add_url_rule("/api/v1/role",
     view_func=admin_view,
     methods=['PUT']

@@ -49,8 +49,19 @@ A user is able to login by sending a `POST` request to `/api/v1/auth/signin` wit
 }
 ```
 
-#### Update password, name and role
-A user can update their details by sending a `PUT` request to `/api/v1/user/<email>` with the json request below. Ensure to replace `<email>` with the email of the user whose details are to be updated.
+If the request is successful, a response with the structure below is returned:
+```
+{
+    "data": {
+        "message": "You have logged in successfully.",
+        "user_token": "Generated token here"
+    }
+}
+```
+ **NOTE:** An authorization token must be attached in the Authorization header with the token generated up user sign in for all requests except sign in and sign up requests.
+
+#### Update password and name
+A user can update their details by sending a `PUT` request to `/api/v1/user` with the json request below. 
 ```json
 {
   "name": "new name",
@@ -58,13 +69,20 @@ A user can update their details by sending a `PUT` request to `/api/v1/user/<ema
   "role": "new role"
 }
 ```
+#### Update user roles
+An admin can update user roles by sending a `PUT` request to `/api/v1/role` with the json request below.  
+```json
+{
+  "email": "email_of_user_to_update_role",
+  "role": "new role"
+}
+```
 
 #### Delete account
-A user can delete an account by sending a `DELETE` request to `/api/v1/user/<email>`. Ensure to replace `<email>` with the email of the user whose details are to be deleted.
+A user can delete an account by sending a `DELETE` request to `/api/v1/user`.
 
 #### Get all users
-An admin can get all user information by sending a `GET` request to `/api/v1/users/<admin-email>`.
-Replace `<admin-email>` with the email of the administrator.
+An admin can get all user information by sending a `GET` request to `/api/v1/users`. 
 
 ### Parcel delivery order
 A user is able to create and fetch a list of their parcels.
@@ -74,7 +92,6 @@ To create a parcel a `POST` request is sent to `/api/v1/parcels`. The request da
 
 ```json
 {
-    "email": "hemworth@gmail.com",
     "parcel": "Bit coins",
     "weight": "2",
     "price": "1500",
@@ -85,20 +102,36 @@ To create a parcel a `POST` request is sent to `/api/v1/parcels`. The request da
 ```
 
 #### Get user's parcels
-A user can get their parcels by sending a `GET` request to `/api/v1/users/<email>parcels`. Replace `<email>` with the email of the user whose parcels are to be fetched.
+A user can get their parcels by sending a `GET` request to `/api/v1/parcels`.
 
 #### Get all users' parcels
-An admin can get all users' parcels by sending a `GET` request to `/api/v1/users/<admin-email>parcels`. Replace `<admin-email>` with the email of the administrator.
+An admin can get all users' parcels by sending a `GET` request to `/api/v1/parcels`. 
 
 #### Get a user parcel by order id
 A user can get their parcels by sending a `GET` request to `/api/v1/parcels/<orderId>`. Replace `<orderId>` with the corresponding order id to retrieve.
 
-#### Edit a parcel
-A user can edit their parcels by sending a `PUT` request to `/api/v1/parcels`.The request data will be in the format shown below. Only destination, current_location and status can be updated, the rest of the information concerning a parcel order is maintained. Status of parcel can be `pending`, `delivered` or `cancelled`.
+#### Cancel a parcel
+A user can cancel a parcel by sending a `PUT` request to `/api/v1/parcels/cancel`.The request data will be in the format shown below. 
+```json
+{
+    "id": "991"
+}
+```
+
+#### Change destination of a parcel
+A user can change destination a parcel by sending a `PUT` request to `/api/v1/parcels/destination`.The request data will be in the format shown below. 
+```json
+{
+    "destination": "Tororo",
+    "id": "1"
+}
+```
+
+#### Edit status and current location of a parcel
+An Admin can a given user's parcel by sending a `PUT` request to `/api/v1/parcels/status`.The request data will be in the format shown below. Only current_location and status can be updated, the rest of the information concerning a parcel order is maintained. Both current_location and status are optional.  
 ```json
 {
     "id": "991",
-    "destination": "Kireka",
     "current_location": "kampala road",
     "status": "delivered"
 }

@@ -28,27 +28,8 @@ class TestViews(BaseTestCase):
             response = self.register_new_user("ajori","ajori@gmail.com","000000", "user")
             data = response.get_json()
 
-            self.assertTrue(data['message'] == 'successfully created new user account')
+            self.assertTrue(data['message'] == 'successfully created new account')
             self.assertEqual(response.status_code, 201)
-
-    @pytest.mark.skip(reason="test later")
-    def Test_to_generate_a_user_token(self):
-        """
-        Test to generate a user token
-        :return:
-        """
-        with self.client:
-            self.register_new_user("user","user@gmail.com","00000", "user")
-            response = self.client.post(
-                'api/v1/auth/signin',
-                content_type='application/json',
-                data=json.dumps(dict(email="user@gmail.com", password="00000"))
-            )
-            data = response.get_json()
-            token = data['user_token']
-            self.assertTrue(data['message'] == 'You have logged in successfully.')
-            self.assertEqual(response.status_code, 200)
-            return token
 
 
     # @pytest.mark.skip(reason="test later")
@@ -60,7 +41,7 @@ class TestViews(BaseTestCase):
         with self.client:
             token = self.get_token("admin","admin@gmail.com","00000", "admin")
             response = self.client.get(
-                'api/v1/users/admin@gmail.com',
+                'api/v1/users',
                 content_type='application/json',
                 headers=dict(Authorization='Bearer ' + token)
             )
@@ -77,7 +58,7 @@ class TestViews(BaseTestCase):
         with self.client:
             token = self.get_token("arnold","arnold@gmail.com","000000", "user")
             response = self.client.get(
-                'api/v1/users/arnold@gmail.com',
+                'api/v1/users',
                 content_type='application/json',
                 headers=dict(Authorization='Bearer ' + token)
             )
@@ -95,7 +76,7 @@ class TestViews(BaseTestCase):
         with self.client:
             token = self.get_token("joyce","joyce@gmail.com","000000", "user")
             response = self.client.put(
-                'api/v1/user/joyce@gmail.com',
+                'api/v1/user',
                 content_type= "application/json",
                 headers=dict(Authorization='Bearer ' + token),
                 data=json.dumps(dict(name="superstar", password="007007"))
@@ -105,7 +86,7 @@ class TestViews(BaseTestCase):
             self.assertTrue(response_data['message'] == "successfully updated account details")
             self.assertEqual(response.status_code, 201)
 
-    @pytest.mark.skip(reason="test later")
+    # @pytest.mark.skip(reason="test later")
     def test_delete_user(self):
         """
         Test a user is successfully deleted
@@ -114,7 +95,7 @@ class TestViews(BaseTestCase):
         with self.client:
             token = self.get_token("stanley","stanley@gmail.com","000000", "user")
             response = self.client.delete(
-                'api/v1/user/stanley@gmail.com',
+                'api/v1/user',
                 headers=dict(Authorization='Bearer ' + token),
             )
             response_data = json.loads(response.data.decode())
@@ -122,33 +103,37 @@ class TestViews(BaseTestCase):
             self.assertTrue(response_data['message'] == "user account deleted")
             self.assertEqual(response.status_code, 200)
 
-    @pytest.mark.skip(reason="test later")
+    # @pytest.mark.skip(reason="test later")
     def test_fetch_specific_user(self):
         """
         Test to get details of a given user
         :return:
         """
         with self.client:
+            token = self.get_token("stanley","stanley@gmail.com","000000", "user")
             response = self.client.get(
-                'api/v1/user/okwii@gmail.com'
+                'api/v1/user',
+                headers=dict(Authorization='Bearer ' + token),
             )
 
             self.assertEqual(response.status_code, 200)
 
     @pytest.mark.skip(reason="test later")
-    def test_fetch_user_with_incorrect_email_format(self):
+    def test_admin_can_update_role_of_another_user_successfully(self):
         """
-        Test to get details of a given user with a wrong email format
+        Test to update role of a user
         :return:
         """
         with self.client:
-            response = self.client.get(
-                'api/v1/user/owiigmail.com'
+            self.get_token("user5","user5@gmail.com","000000", "user")
+            token = self.get_token("admin","admin@gmail.com","000000", "admin")
+            response = self.client.put(
+                '/api/v1/role',
+                data=json.dumps(dict(email="user5@gmail", role="admin")),
+                headers=dict(Authorization='Bearer ' + token),
             )
-            response_data = json.loads(response.data.decode())
 
-            self.assertTrue(response_data['message'] == "missing or incorrect email format")
-            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.status_code, 200)
 
     @pytest.mark.skip(reason="test later")
     def test_fetch_user_who_is_not_registered(self):
@@ -178,37 +163,41 @@ class TestViews(BaseTestCase):
             self.assertTrue(response_data['message'] == "password is missing or less than 4 characters")
             self.assertEqual(response.status_code, 400)
 
-    @pytest.mark.skip(reason="test later")
+    # @pytest.mark.skip(reason="test later")
     def test_custom_error_url_found(self):
         """
         Test requested endpoint was not found
         :return:
         """
         with self.client:
+            token = self.get_token("stanley","stanley@gmail.com","000000", "user")
             response = self.client.put(
-                '/api/v1/users/stanley@gmail.com/forget'
+                '/api/v1/users/forget',
+                 headers=dict(Authorization='Bearer ' + token),
             )
             response_data = json.loads(response.data.decode())
 
             self.assertTrue(response_data['message'] == "The requested endpoint was not found")
             self.assertEqual(response.status_code, 404)
 
-    @pytest.mark.skip(reason="test later")
+    # @pytest.mark.skip(reason="test later")
     def test_custom_error_method_not_allowed_for_the_requested_URL(self):
         """
         Test method is not allowed for the requested URL
         :return:
         """
         with self.client:
+            token = self.get_token("stanley","stanley@gmail.com","000000", "user")
             response = self.client.patch(
-                'api/v1/user'
+                'api/v1/user',
+                headers=dict(Authorization='Bearer ' + token)
             )
             response_data = json.loads(response.data.decode())
 
             self.assertTrue(response_data['message'] == "The method is not allowed for the requested URL")
             self.assertEqual(response.status_code, 405)
 
-    @pytest.mark.skip(reason="test later")
+    # @pytest.mark.skip(reason="test later")
     def test_sign_in_request_is_json(self):
         """
         Test that the content type is application/json
