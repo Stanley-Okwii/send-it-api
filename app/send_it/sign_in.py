@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flasgger import swag_from
 from flask.views import MethodView
 from app.common.util import (
     get_specific_user,
@@ -16,6 +17,7 @@ from flask_jwt_extended import (
     )
 
 class SignIn(MethodView):
+    @swag_from('../docs/sign_in.yml')
     def post(self):
         abort_if_content_type_is_not_json()
         args = request.get_json()

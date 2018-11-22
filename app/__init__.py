@@ -12,10 +12,39 @@ from app.send_it.parcel_delivery import (
     ParcelStatus
     )
 from flask_jwt_extended import JWTManager
+from flasgger import Swagger
 
 api = Flask(__name__)
 
 api.config['JWT_SECRET_KEY'] = 'Abracadabra'
+
+# def authenticate(username, password):
+#     user = username_table.get(username, None)
+#     if user and safe_str_cmp(user.password.encode('utf-8'), password.encode('utf-8')):
+#         return user
+
+
+# def identity(payload):
+#     user_id = payload['identity']
+#     return userid_table.get(user_id, None)
+
+swagger = Swagger(api,
+    template={
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Swagger Send it App",
+            "version": "1.0",
+        },
+        "consumes": [
+            "application/x-www-form-urlencoded",
+        ],
+        "produces": [
+            "application/json",
+        ],
+    },
+)
+
+# jwt = JWT(app, authenticate, identity)
 jwt = JWTManager(api)
 
 # app configuration
@@ -64,7 +93,7 @@ api.add_url_rule(
 api.add_url_rule(
     "/api/v1/parcels",
     view_func=parcel_delivery_order_view,
-    methods=['POST', 'PUT', 'GET']
+    methods=['POST', 'GET']
     )
 api.add_url_rule(
     "/api/v1/parcels/<orderId>",

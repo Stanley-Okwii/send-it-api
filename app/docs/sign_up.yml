@@ -1,0 +1,25 @@
+Sign up
+---
+tags:
+  - Create a user account
+parameters:
+  - in: body
+    name: body
+    required: true
+    schema:
+        properties:
+            name:
+                type: string
+                default: username
+            email:
+                type: string
+                default: example@gmail.com
+            password:
+                type: string
+                default: password
+    description: Endpoint to register a new user
+responses:
+  201:
+    description: successfully created new account
+  400:
+    description: missing or incorrect email format

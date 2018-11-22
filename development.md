@@ -7,7 +7,7 @@
 user@user:~$ git clone https://github.com/Stanley-Okwii/send-it-api.git
 ```
  
- The code is in python. Use a typescript IDE of your choice, like Visual Studio Code or WebStorm.
+ The code is in python. Use a python IDE of your choice, like Visual Studio Code or WebStorm.
  
 ## To set up the development environment, run:
 ```console

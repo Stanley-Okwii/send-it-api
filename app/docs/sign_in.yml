@@ -1,0 +1,22 @@
+Sign in
+---
+tags:
+  - Sign in
+parameters:
+  - in: body
+    name: body
+    required: true
+    schema:
+        properties:
+            email:
+                type: string
+                default: example@gmail.com
+            password:
+                type: string
+                default: password
+    description: Endpoint to sign in
+responses:
+  200:
+    description: You have logged in successfully.
+  401:
+    description: Invalid email or password, Please try again

@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flasgger import swag_from
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.db_methods import (
@@ -92,6 +93,7 @@ class User(MethodView):
 
         return response("successfully updated account details", 201)
 
+    @swag_from('../docs/sign_up.yml')
     def post(self):
         abort_if_content_type_is_not_json()
         arguments = request.get_json()
