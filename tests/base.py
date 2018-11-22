@@ -32,7 +32,7 @@ class BaseTestCase(TestCase):
             data=json.dumps(dict(name=name, email=email, password=password, role= role))
             )
 
-    def create_new_parcel_delivery_order(self, email,parcel,weight,price,receiver,pickup_location,destination, token):
+    def create_new_parcel_delivery_order(self, parcel,weight,price,receiver,pickup_location,destination, token):
         """
         Helper method for creating a parcel
         :return:
@@ -42,7 +42,6 @@ class BaseTestCase(TestCase):
             content_type = 'application/json',
             headers=dict(Authorization='Bearer ' + token),
             data = json.dumps(dict(
-                email=email,
                 parcel=parcel,
                 weight=weight,
                 price=price,

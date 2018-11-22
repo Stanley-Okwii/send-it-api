@@ -88,7 +88,7 @@ def abort_if_parcel_input_is_not_valid(parameter):
     for key, value in parameter.items():
         if(not value or value == ""):
             abort(make_response(
-                jsonify(message="value of {0} is not have valid".format(key)),
+                jsonify(message="value of {0} is not valid".format(key)),
                 400))
 
 def abort_if_content_type_is_not_json():

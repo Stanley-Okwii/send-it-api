@@ -57,30 +57,6 @@ class ParcelDeliveryOrder(MethodView):
             user_orders = get_parcels_by_email(user['email'])
             return process_response_data(user_orders, 200)
 
-    @jwt_required
-    def put(self):
-        abort_if_content_type_is_not_json()
-        arguments = request.get_json()
-        abort_if_user_input_is_missing(arguments, ['id'])
-        orderId = arguments['id']
-        abort_if_parcel_does_not_exist(orderId)
-        currentOrder = get_specific_parcel_by_id(orderId)
-        order_update = {
-            'order_id': currentOrder['order_id'],
-            'pickup_location': currentOrder['pickup_location'],
-            'destination': arguments['destination']
-                if 'destination' in arguments.keys()
-                else currentOrder['destination'],
-            'current_location': arguments['current_location']
-                if 'current_location' in arguments.keys()
-                else currentOrder['current_location'],
-            'status':  arguments['status']
-                if 'status' in arguments.keys()
-                else currentOrder['status']
-            }
-        update_parcel_order(data=order_update)
-
-        return response('parcel has been successfully updated', 201)
 
 class UserParcelOrder(MethodView):
     @jwt_required
