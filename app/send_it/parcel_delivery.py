@@ -32,8 +32,7 @@ class ParcelDeliveryOrder(MethodView):
         abort_if_parcel_input_is_not_valid(arguments)
         user = get_jwt_identity()
         email = user['email']
-        if user['role'] == 'user':
-            newOrder = {
+        newOrder = {
                 'parcel': arguments['parcel'],
                 'weight': arguments['weight'],
                 'price': arguments['price'],
@@ -43,10 +42,8 @@ class ParcelDeliveryOrder(MethodView):
                 'current_location': arguments['pickup_location'],
                 'email': email
                 }
-            create_parcel_order(newOrder)
-            return response('parcel delivery order successfully created', 201)
-        else:
-            return response('only users are allowed to create parcels', 401)
+        create_parcel_order(newOrder)
+        return response('parcel delivery order successfully created', 201)
 
     @jwt_required
     @swag_from('../docs/get_parcels.yml')

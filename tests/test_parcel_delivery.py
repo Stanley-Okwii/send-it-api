@@ -3,7 +3,7 @@ import json
 import pytest
 
 class TestParcelDeliveryOrder(BaseTestCase):
-    # @pytest.mark.skip(reason="test later")
+
     def test_user_can_create_a_parcel_delivery_order(self):
         """
         Test that a user can create a delivery parcel order
@@ -25,29 +25,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
             self.assertTrue(data['message'] == 'parcel delivery order successfully created')
             self.assertEqual(response.status_code, 201)
 
-    # @pytest.mark.skip(reason="test later")
-    def test_admin_can_not_create_a_parcel_delivery_order(self):
-        """
-        Test that an admin can not create a delivery parcel order
-        :return:
-        """
-        with self.client:
-            token = self.get_token("admin","admin@gmail.com","000000", "admin")
-            response = self.create_new_parcel_delivery_order(
-                "Big money",
-                '3',
-                "950",
-                "Diana",
-                "Wandegeya",
-                "Kikoni",
-                token
-                )
-            data = json.loads(response.data.decode())
 
-            self.assertTrue(data['message'] == 'only users are allowed to create parcels')
-            self.assertEqual(response.status_code, 401)
-
-    # @pytest.mark.skip(reason="test later")
     def test_user_can_not_create_a_parcel_delivery_order_with_in_valid_parameter(self):
         """
         Test that a user can not create a delivery parcel order with in valid parameter
@@ -73,7 +51,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
             self.assertTrue(data['message'] == 'value of weight is not valid')
             self.assertEqual(response.status_code, 400)
 
-    # @pytest.mark.skip(reason="test later")
+    
     def test_admin_can_get_all_parcels(self):
         """
         Test that admin can get all delivery orders for all users
@@ -88,7 +66,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
 
             self.assertEqual(response.status_code, 200)
 
-    # @pytest.mark.skip(reason="test later")
+    
     def test_user_can_get_all_parcels_belonging_to_them(self):
         """
         Test that user can get parcels that belong to them
@@ -112,7 +90,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
 
             self.assertEqual(response.status_code, 200)
 
-    # @pytest.mark.skip(reason="test later")
+    
     def test_user_can_get_specific_parcel(self):
         """
         Test that user can get a specific parcel
@@ -161,7 +139,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
             self.assertTrue(data['message'] == 'user does not have any orders')
             self.assertEqual(response.status_code, 400)
 
-    # @pytest.mark.skip(reason="test later")
+    
     def test_get_a_parcel_that_does_not_exist(self):
         """
         Test that a user can not get parcel when it does not exist or wrong id is provided
@@ -178,7 +156,7 @@ class TestParcelDeliveryOrder(BaseTestCase):
             self.assertTrue(data['message'] == 'parcel order does not exist')
             self.assertEqual(response.status_code, 400)
 
-    # @pytest.mark.skip(reason="test later")
+    
     def test_user_can_cancel_a_parcel_delivery_order(self):
         """
         Test that a user can cancel a delivery parcel order
@@ -217,8 +195,6 @@ class TestParcelDeliveryOrder(BaseTestCase):
         with self.client:
             self.register_new_user("julie","julie@gmail.com", "00000", "admin")
             self.create_new_parcel_delivery_order(
-                "julie@gmail.com",
-                "025",
                 "veg pizza",
                 '3',
                 "95210",

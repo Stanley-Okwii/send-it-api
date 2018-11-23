@@ -44,7 +44,7 @@ class Admin(MethodView):
     def put(self):
         arguments = request.get_json()
         abort_if_user_input_is_missing(arguments, ["email", "role"])
-        abort_if_content_type_is_not_json
+        abort_if_content_type_is_not_json()
         email = arguments['email']
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
