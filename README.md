@@ -9,6 +9,7 @@ A set of API endpoints to provide and manipulate data for the SendIT courier ser
 
 ## Test Project 
 This API is hosted at [send-it-api](https://sender-app.herokuapp.com) on [heroku](heroku.com)
+For a more detailed description of the routes , see the [API documentation](https://sender-app.herokuapp.com/apidocs/)
 
 ## Dependencies
 Flask 1.0.2  
