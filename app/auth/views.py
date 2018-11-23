@@ -28,6 +28,7 @@ class Welcome(MethodView):
 
 class UserList(MethodView):
     @jwt_required
+    @swag_from('../docs/admin_view_users.yml')
     def get(self):
         user = get_jwt_identity()
         users = get_all_users()
@@ -39,6 +40,7 @@ class UserList(MethodView):
 
 class Admin(MethodView):
     @jwt_required
+    @swag_from('../docs/admin_update_role.yml')
     def put(self):
         arguments = request.get_json()
         abort_if_user_input_is_missing(arguments, ["email", "role"])
@@ -62,6 +64,7 @@ class Admin(MethodView):
 
 class User(MethodView):
     @jwt_required
+    @swag_from('../docs/user_details.yml')
     def get(self):
         user = get_jwt_identity()
         response = get_specific_user(user['email'])
@@ -69,6 +72,7 @@ class User(MethodView):
         return process_response_data(response, 200)
 
     @jwt_required
+    @swag_from('../docs/delete_user.yml')
     def delete(self):
         user = get_jwt_identity()
         delete_user_account(email = user['email'])
@@ -76,6 +80,7 @@ class User(MethodView):
         return response("user account deleted", 200)
 
     @jwt_required
+    @swag_from('../docs/edit_user.yml')
     def put(self):
         user = get_jwt_identity()
         abort_if_content_type_is_not_json()

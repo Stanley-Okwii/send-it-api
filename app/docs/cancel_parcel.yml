@@ -1,0 +1,31 @@
+cancel delivery order before it is marked as  delivered
+---
+tags:
+  - Parcels
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+parameters:
+- in: header
+  schema:
+    type: string
+    format: uuid
+  required: true
+  name: Authorization
+  description: Authorization header
+- in: body
+  name: body
+  required: true
+  schema:
+      properties:
+          id:
+              type: integer
+              default: 1
+responses:
+  200:
+    description: parcel order has been cancelled
+security:
+  - bearerAuth: [] 

@@ -1,7 +1,7 @@
 Sign in
 ---
 tags:
-  - Sign in
+  - Users
 parameters:
   - in: body
     name: body

@@ -1,7 +1,11 @@
-Sign up
+create a user account
 ---
 tags:
-  - Create a user account
+  - Users
+consumes:
+- application/json
+produces:
+- application/json
 parameters:
   - in: body
     name: body

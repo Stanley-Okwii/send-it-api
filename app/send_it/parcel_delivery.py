@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flasgger import swag_from
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.db_methods import create_parcel_order, get_all_parcel_orders, update_parcel_order
@@ -23,6 +24,7 @@ from app.common.util import (
 
 class ParcelDeliveryOrder(MethodView):
     @jwt_required
+    @swag_from('../docs/create_parcel.yml')
     def post(self):
         arguments = request.get_json()
         abort_if_content_type_is_not_json()
@@ -47,6 +49,7 @@ class ParcelDeliveryOrder(MethodView):
             return response('only users are allowed to create parcels', 401)
 
     @jwt_required
+    @swag_from('../docs/get_parcels.yml')
     def get(self):
         user = get_jwt_identity()
         if(user['role'] == 'admin'): 
@@ -60,6 +63,7 @@ class ParcelDeliveryOrder(MethodView):
 
 class UserParcelOrder(MethodView):
     @jwt_required
+    @swag_from('../docs/get_a_parcel.yml')
     def get(self, orderId):
         if(len(str(orderId)) > 0 and str(orderId).isnumeric()):
             single_parcel = get_specific_parcel_by_id(orderId)
@@ -72,6 +76,7 @@ class UserParcelOrder(MethodView):
 
 class CancelParcel(MethodView):
     @jwt_required
+    @swag_from('../docs/cancel_parcel.yml')
     def put(self):
         abort_if_content_type_is_not_json()
         arguments = request.get_json()
@@ -97,6 +102,7 @@ class CancelParcel(MethodView):
 
 class ParcelDestination(MethodView):
     @jwt_required
+    @swag_from('../docs/parcel_destination.yml')
     def put(self):
         abort_if_content_type_is_not_json()
         arguments = request.get_json()
@@ -122,6 +128,7 @@ class ParcelDestination(MethodView):
 
 class ParcelStatus(MethodView):
     @jwt_required
+    @swag_from('../docs/parcel_status.yml')
     def put(self):
         abort_if_content_type_is_not_json()
         arguments = request.get_json()

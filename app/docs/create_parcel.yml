@@ -1,0 +1,46 @@
+create a parcel delivery order
+---
+tags:
+  - Parcels
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+parameters:
+- in: header
+  schema:
+    type: string
+    format: uuid
+  required: true
+  name: Authorization
+  description: Authorization header
+- in: body
+  name: body
+  required: true
+  schema:
+      properties:
+          parcel:
+              type: string
+              default: parcel
+          weight:
+              type: integer
+              default: 12
+          price:
+              type: integer
+              default: 5000
+          receiver:
+              type: string
+              default: Mary
+          pickup_location:
+              type: string
+              default: Florida
+          destination:
+              type: string
+              default: California
+responses:
+  201:
+    description: parcel delivery order successfully created
+security:
+  - bearerAuth: [] 

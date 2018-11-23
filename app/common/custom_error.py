@@ -17,4 +17,4 @@ def unauthorized_access(e):
 
 @api.errorhandler(ExpiredSignatureError)
 def expired_token(e):
-    return response('Token has expired, provide a generate a new token and try again', 400)
+    return response('Token has expired, generate a new token and try again', 400)

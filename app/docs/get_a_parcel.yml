@@ -1,0 +1,28 @@
+get a single parcel delivery order
+---
+tags:
+  - Parcels
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+parameters:
+- in: header
+  schema:
+    type: string
+    format: uuid
+  required: true
+  name: Authorization
+  description: Authorization header
+- name: id
+  in: path
+  type: string
+  required: true
+  description: Parcel delivery order ID
+responses:
+  200:
+    description: Show a single parcel order
+security:
+  - bearerAuth: [] 

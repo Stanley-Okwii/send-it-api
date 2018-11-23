@@ -1,0 +1,37 @@
+change status and current location of a parcel delivery order
+---
+tags:
+  - Parcels
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+parameters:
+- in: header
+  schema:
+    type: string
+    format: uuid
+  required: true
+  name: Authorization
+  description: Authorization header
+- in: body
+  name: body
+  required: true
+  schema:
+      properties:
+          id:
+              type: integer
+              default: 1
+          status:
+              type: string
+              default: delivered
+          current_location:
+              type: string
+              default: delivered
+responses:
+  201:
+    description: parcel order has been updated
+security:
+  - bearerAuth: [] 
