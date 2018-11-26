@@ -22,9 +22,11 @@ from app.common.util import (
     abort_if_content_type_is_not_json
     )
 
+
 class Welcome(MethodView):
     def get(self):
-        return response("welcome to send it api v1", 200)
+        return response('welcome to send it api v1', 200)
+
 
 class UserList(MethodView):
     @jwt_required
@@ -35,7 +37,9 @@ class UserList(MethodView):
         if(user['role'] == 'admin'):
             return process_response_data(users, 200)
         else:
-            return response("you do not have permission to access this endpoint", 404)
+            return response(
+                'you do not have permission to access this endpoint',
+                401)
 
 
 class Admin(MethodView):
@@ -43,23 +47,25 @@ class Admin(MethodView):
     @swag_from('../docs/admin_update_role.yml')
     def put(self):
         arguments = request.get_json()
-        abort_if_user_input_is_missing(arguments, ["email", "role"])
+        abort_if_user_input_is_missing(arguments, ['email', 'role'])
         abort_if_content_type_is_not_json()
         email = arguments['email']
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_does_not_exist(email)
         role = arguments['role']
-        abort_if_attribute_is_empty("role", role)
+        abort_if_attribute_is_empty('role', role)
         user = get_jwt_identity()
-        if(user['role']=='admin'):
+        if(user['role'] == 'admin'):
             user_details = {
-                "email": email,
-                "role": role
+                'email': email,
+                'role': role
             }
             update_user_role_to_admin(user_details)
-            return response("user role changed to {}".format(role), 200)
+            return response('user role changed to {}'.format(role), 200)
         else:
-            return response("you do not have permission to access this endpoint", 404)
+            return response(
+                'you do not have permission to access this endpoint',
+                401)
 
 
 class User(MethodView):
@@ -75,9 +81,9 @@ class User(MethodView):
     @swag_from('../docs/delete_user.yml')
     def delete(self):
         user = get_jwt_identity()
-        delete_user_account(email = user['email'])
+        delete_user_account(email=user['email'])
 
-        return response("user account deleted", 200)
+        return response('user account deleted', 200)
 
     @jwt_required
     @swag_from('../docs/edit_user.yml')
@@ -85,28 +91,28 @@ class User(MethodView):
         user = get_jwt_identity()
         abort_if_content_type_is_not_json()
         arguments = request.get_json()
-        abort_if_user_input_is_missing(arguments, ["name", "password"])
+        abort_if_user_input_is_missing(arguments, ['name', 'password'])
         name = arguments['name']
-        abort_if_attribute_is_empty("name", name)
+        abort_if_attribute_is_empty('name', name)
         password = arguments['password']
         abort_if_password_is_less_than_4_characters(password)
         newUser = {
             'username': name,
-            "password": password
+            'password': password
             }
-        update_user_account(email = user['email'], data = newUser)
+        update_user_account(email=user['email'], data=newUser)
 
-        return response("successfully updated account details", 201)
+        return response('successfully updated account details', 201)
 
     @swag_from('../docs/sign_up.yml')
     def post(self):
         abort_if_content_type_is_not_json()
         arguments = request.get_json()
-        abort_if_user_input_is_missing(arguments, ["name","email","password"])
+        abort_if_user_input_is_missing(arguments, ['name', 'email', 'password'])
         name = arguments['name']
         email = arguments['email']
         password = arguments['password']
-        abort_if_attribute_is_empty("name", name)
+        abort_if_attribute_is_empty('name', name)
         abort_if_email_does_not_match_type_email(email)
         abort_if_user_already_exists(email, name)
         abort_if_password_is_less_than_4_characters(password)
@@ -115,7 +121,12 @@ class User(MethodView):
         else:
             role = 'user'
 
-        newUser = { 'username': name, "email": email, "password": password, 'role': role }
-        register_new_user(data = newUser)
+        newUser = {
+            'username': name,
+            'email': email,
+            'password': password,
+            'role': role
+            }
+        register_new_user(data=newUser)
 
-        return response("successfully created new account", 201)
+        return response('successfully created new account', 201)

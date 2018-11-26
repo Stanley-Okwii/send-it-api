@@ -16,6 +16,7 @@ from flask_jwt_extended import (
     create_access_token
     )
 
+
 class SignIn(MethodView):
     @swag_from('../docs/sign_in.yml')
     def post(self):
@@ -35,7 +36,7 @@ class SignIn(MethodView):
             'email': user['email'],
             'role': user['role']
             }
-        access_token = create_access_token(identity = user_identity)
+        access_token = create_access_token(identity=user_identity)
         user_response = {
                 'message': 'You have logged in successfully.',
                 'user_token': access_token

@@ -2,7 +2,11 @@ from flask import jsonify, request
 from flasgger import swag_from
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.db_methods import create_parcel_order, get_all_parcel_orders, update_parcel_order
+from app.db_methods import (
+    create_parcel_order,
+    get_all_parcel_orders,
+    update_parcel_order
+    )
 from app.common.util import (
     get_specific_user,
     abort_if_user_does_not_exist,
@@ -21,6 +25,7 @@ from app.common.util import (
     abort_if_attribute_is_empty,
     abort_if_user_input_is_missing
     )
+
 
 class ParcelDeliveryOrder(MethodView):
     @jwt_required
@@ -71,6 +76,7 @@ class UserParcelOrder(MethodView):
         else:
             return response("parcel order must be numeric ", 400)
 
+
 class CancelParcel(MethodView):
     @jwt_required
     @swag_from('../docs/cancel_parcel.yml')
@@ -96,6 +102,7 @@ class CancelParcel(MethodView):
             update_parcel_order(data=order_update)
 
         return response('parcel delivery has been cancelled', 201)
+
 
 class ParcelDestination(MethodView):
     @jwt_required
@@ -123,6 +130,7 @@ class ParcelDestination(MethodView):
 
         return response('parcel delivery destination has been changed', 201)
 
+
 class ParcelStatus(MethodView):
     @jwt_required
     @swag_from('../docs/parcel_status.yml')
@@ -142,11 +150,11 @@ class ParcelStatus(MethodView):
                 'pickup_location': currentOrder['pickup_location'],
                 'destination': currentOrder['destination'],
                 'current_location': arguments['current_location']
-                    if 'current_location' in arguments.keys()
-                    else currentOrder['current_location'],
-                'status':  arguments['status']
-                    if 'status' in arguments.keys()
-                    else currentOrder['status']
+                                    if 'current_location' in arguments.keys()
+                                    else currentOrder['current_location'],
+                'status': arguments['status']
+                          if 'status' in arguments.keys()
+                          else currentOrder['status']
                 }
             update_parcel_order(data=order_update)
 

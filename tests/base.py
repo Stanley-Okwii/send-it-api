@@ -5,6 +5,7 @@ import json
 
 db = DataModel()
 
+
 class BaseTestCase(TestCase):
     def create_app(self):
         """
@@ -29,19 +30,24 @@ class BaseTestCase(TestCase):
         return self.client.post(
             'api/v1/user',
             content_type='application/json',
-            data=json.dumps(dict(name=name, email=email, password=password, role= role))
+            data=json.dumps(dict(
+                name=name,
+                email=email,
+                password=password,
+                role=role))
             )
 
-    def create_new_parcel_delivery_order(self, parcel,weight,price,receiver,pickup_location,destination, token):
+    def create_new_parcel_delivery_order(self, parcel, weight, price, receiver,
+                                         pickup_location, destination, token):
         """
         Helper method for creating a parcel
         :return:
         """
         return self.client.post(
             'api/v1/parcels',
-            content_type = 'application/json',
+            content_type='application/json',
             headers=dict(Authorization='Bearer ' + token),
-            data = json.dumps(dict(
+            data=json.dumps(dict(
                 parcel=parcel,
                 weight=weight,
                 price=price,
@@ -59,12 +65,16 @@ class BaseTestCase(TestCase):
         self.client.post(
             'api/v1/user',
             content_type='application/json',
-            data=json.dumps(dict(name=name, email=email, password=password, role= role))
+            data=json.dumps(dict(
+                name=name,
+                email=email,
+                password=password,
+                role=role))
             )
         response = self.client.post(
             'api/v1/auth/signin',
-            content_type = 'application/json',
-            data = json.dumps(dict(
+            content_type='application/json',
+            data=json.dumps(dict(
                 email=email,
                 password=password
             )))

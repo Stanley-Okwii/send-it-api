@@ -33,7 +33,7 @@ app_settings = os.getenv(
 )
 api.config.from_object(app_settings)
 
-db =  DataModel()
+db = DataModel()
 db.create_user_table()
 db.create_parcel_order_table()
 
@@ -94,7 +94,4 @@ api.add_url_rule(
     view_func=parcel_status_view,
     methods=['PUT']
     )
-api.add_url_rule("/api/v1/role",
-    view_func=admin_view,
-    methods=['PUT']
-    )
+api.add_url_rule("/api/v1/role", view_func=admin_view, methods=['PUT'])
