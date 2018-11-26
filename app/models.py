@@ -4,7 +4,7 @@ from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 
 # load dotenv in the base root
-APP_ROOT = os.path.join(os.path.dirname(__file__), '')
+APP_ROOT = os.path.join(os.path.dirname(__file__))
 dotenv_path = os.path.join(APP_ROOT, '.env')
 load_dotenv(dotenv_path)
 
@@ -18,8 +18,8 @@ class DataModel(object):
             self.connection = connect(os.getenv('TESTING'))
         elif API_ENVIRONMENT == 'DEVELOPMENT':
             self.connection = connect(os.getenv('DEVELOPMENT'))
-        elif API_ENVIRONMENT == 'TRAVIS':
-            self.connection = connect(database=os.getenv('TRAVIS'))
+        elif os.getenv('TRAVIS'):
+            self.connection = connect(database=os.getenv('TRAVIS_DB'))
         else:
             self.connection = connect(os.getenv('HEROKU'))
 
