@@ -8,10 +8,6 @@ from app.db_methods import (
     update_parcel_order
     )
 from app.common.util import (
-    get_specific_user,
-    abort_if_user_does_not_exist,
-    abort_if_email_does_not_match_type_email,
-    abort_if_password_is_less_than_4_characters,
     abort_if_user_does_not_have_orders,
     abort_if_user_does_not_own_order,
     abort_if_parcel_does_not_exist,
@@ -22,7 +18,6 @@ from app.common.util import (
     abort_if_parcel_input_is_missing,
     abort_if_parcel_input_is_not_valid,
     abort_if_content_type_is_not_json,
-    abort_if_attribute_is_empty,
     abort_if_user_input_is_missing
     )
 

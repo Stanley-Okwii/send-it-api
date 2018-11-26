@@ -108,7 +108,8 @@ class User(MethodView):
     def post(self):
         abort_if_content_type_is_not_json()
         arguments = request.get_json()
-        abort_if_user_input_is_missing(arguments, ['name', 'email', 'password'])
+        abort_if_user_input_is_missing(arguments,
+                                       ['name', 'email', 'password'])
         name = arguments['name']
         email = arguments['email']
         password = arguments['password']

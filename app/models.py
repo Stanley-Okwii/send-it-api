@@ -13,7 +13,7 @@ class DataModel(object):
         #     self.connection = connect(app_config['development'].DATABASE_URL)
         # if app_config['production']:
         #     self.connection = connect(app_config['production'].DATABASE_URL)
-        self.connection = connect(database="sendit_test")
+        # self.connection = connect(database="sendit_test")
 
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
