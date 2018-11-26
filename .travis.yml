@@ -15,7 +15,6 @@ env:
 
 install:
   - pip install -r requirements.txt
-  - pip install -U python-dotenv
   - pip install coveralls
 
 script:
