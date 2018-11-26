@@ -5,3 +5,4 @@ htmlcov/
 .coverage
 .vscode
 __init__.pyc
+app/.env

@@ -26,13 +26,6 @@ swagger = Swagger(api)
 
 jwt = JWTManager(api)
 
-# app configuration
-app_settings = os.getenv(
-    'APP_SETTINGS',
-    'app.config.DevelopmentConfig'
-)
-api.config.from_object(app_settings)
-
 db = DataModel()
 db.create_user_table()
 db.create_parcel_order_table()

@@ -10,7 +10,7 @@ before_script:
   - psql -c 'create database sendit_test;' -U postgres
 
 before_install:
-  - export APP_SETTINGS="app.config.TestingConfig"
+  - export API_ENV=TRAVIS
 
 install:
   - pip install -r requirements.txt

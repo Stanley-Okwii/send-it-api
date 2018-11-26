@@ -1,19 +1,27 @@
 import os
-from app.config import app_config
 from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
+from dotenv import load_dotenv
+
+# load dotenv in the base root
+APP_ROOT = os.path.join(os.path.dirname(__file__), '')
+dotenv_path = os.path.join(APP_ROOT, '.env')
+load_dotenv(dotenv_path)
+
+API_ENVIRONMENT = os.getenv('API_ENV')
 
 
 class DataModel(object):
     def __init__(self):
         """create instance of a connection instance to sendit database"""
-        # if app_config['testing']:
-        #     self.connection = connect(app_config['testing'].DATABASE_URL)
-        # if app_config['development']:
-        #     self.connection = connect(app_config['development'].DATABASE_URL)
-        # if app_config['production']:
-        #     self.connection = connect(app_config['production'].DATABASE_URL)
-        # self.connection = connect(database="sendit_test")
+        if API_ENVIRONMENT == 'TESTING':
+            self.connection = connect(os.getenv('TESTING'))
+        elif API_ENVIRONMENT == 'DEVELOPMENT':
+            self.connection = connect(os.getenv('DEVELOPMENT'))
+        elif API_ENVIRONMENT == 'TRAVIS':
+            self.connection = connect(database=os.getenv('TRAVIS'))
+        else:
+            self.connection = connect(os.getenv('HEROKU'))
 
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
@@ -24,7 +32,8 @@ class DataModel(object):
     def create_user_table(self):
         """create table to store user information"""
         user_table_query = "CREATE TABLE IF NOT EXISTS users (email varchar(100) PRIMARY KEY, \
-        username varchar(50), password varchar(256), role varchar(15) NOT NULL DEFAULT 'user')"
+                            username varchar(50), password varchar(256), \
+                            role varchar(15) NOT NULL DEFAULT 'user')"
 
         self.cursor.execute(user_table_query)
 
