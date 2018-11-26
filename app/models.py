@@ -19,7 +19,7 @@ class DataModel(object):
         elif API_ENVIRONMENT == 'DEVELOPMENT':
             self.connection = connect(os.getenv('DEVELOPMENT'))
         elif API_ENVIRONMENT == 'TRAVIS':
-            self.connection = connect(database=os.getenv('TRAVIS'))
+            self.connection = connect(database='sendit_test')
         else:
             self.connection = connect(os.getenv('HEROKU'))
 

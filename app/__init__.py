@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 from app.auth.views import Welcome, User, UserList, Admin
 from app.models import DataModel

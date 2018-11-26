@@ -10,10 +10,11 @@ before_script:
   - psql -c 'create database sendit_test;' -U postgres
 
 before_install:
-  - export API_ENV=TRAVIS
+  - export API_ENV='TRAVIS'
 
 install:
   - pip install -r requirements.txt
+  - pip install -U python-dotenv
   - pip install coveralls
 
 script:

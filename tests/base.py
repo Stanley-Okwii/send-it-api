@@ -12,7 +12,6 @@ class BaseTestCase(TestCase):
         Create an instance of the app
         :return:
         """
-        api.config.from_object('app.config.TestingConfig')
         return api
 
     def setUp(self):
