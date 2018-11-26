@@ -3,7 +3,7 @@ from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 
-# load dotenv in the base root
+# load dot env in the base root
 APP_ROOT = os.path.join(os.path.dirname(__file__))
 dotenv_path = os.path.join(APP_ROOT, '.env')
 load_dotenv(dotenv_path)
@@ -21,7 +21,7 @@ class DataModel(object):
         elif os.getenv('TRAVIS'):
             self.connection = connect(database=os.getenv('TRAVIS_DB'))
         else:
-            self.connection = connect(os.getenv('HEROKU'))
+            self.connection = connect(os.getenv('DATABASE_URL'))
 
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
