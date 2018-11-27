@@ -1,7 +1,7 @@
 # SEND IT API
-[![Coverage Status](https://coveralls.io/repos/github/Stanley-Okwii/send-it-api/badge.svg?branch=persistent-data)](https://coveralls.io/github/Stanley-Okwii/send-it-api?branch=persistent-data)
+[![Coverage Status](https://coveralls.io/repos/github/Stanley-Okwii/send-it-api/badge.svg?branch=development)](https://coveralls.io/github/Stanley-Okwii/send-it-api?branch=development)
 [![Build Status](https://travis-ci.org/Stanley-Okwii/send-it-api.svg?branch=persistent-data)](https://travis-ci.org/Stanley-Okwii/send-it-api/)
-[![Requirements Status](https://requires.io/github/Stanley-Okwii/send-it-api/requirements.svg?branch=persistent-data)](https://requires.io/github/Stanley-Okwii/send-it-api/requirements/?branch=persistent-data)
+[![Requirements Status](https://requires.io/github/Stanley-Okwii/send-it-api/requirements.svg?branch=development)](https://requires.io/github/Stanley-Okwii/send-it-api/requirements/?branch=development)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e1b69a7d2b1a4e15a7ad9db7a7de6a64)](https://www.codacy.com/app/Stanley-Okwii/send-it-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Stanley-Okwii/send-it-api&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/deffc4af002cf7975420/maintainability)](https://codeclimate.com/github/Stanley-Okwii/send-it-api/maintainability)
 
