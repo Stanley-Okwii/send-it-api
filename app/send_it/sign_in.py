@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from flasgger import swag_from
+import datetime
 from flask.views import MethodView
 from app.common.util import (
     get_specific_user,
@@ -36,7 +37,10 @@ class SignIn(MethodView):
             'email': user['email'],
             'role': user['role']
             }
-        access_token = create_access_token(identity=user_identity)
+        expires = datetime.timedelta(days=1)
+        access_token = create_access_token(
+            identity=user_identity,
+            expires_delta=expires)
         user_response = {
                 'message': 'You have logged in successfully.',
                 'user_token': access_token
