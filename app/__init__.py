@@ -12,8 +12,10 @@ from app.send_it.parcel_delivery import (
     )
 from flask_jwt_extended import JWTManager
 from flasgger import Swagger
+from flask_cors import CORS
 
 api = Flask(__name__)
+CORS(api)
 
 api.config['JWT_SECRET_KEY'] = 'Abracadabra'
 api.config['SWAGGER'] = {
@@ -21,6 +23,7 @@ api.config['SWAGGER'] = {
     'uiversion': 3,
     'description': 'A set of API endpoints to provide and manipulate data for the SendIT courier services',
 }
+
 swagger = Swagger(api)
 
 jwt = JWTManager(api)
