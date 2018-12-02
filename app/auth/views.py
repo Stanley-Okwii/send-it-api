@@ -8,7 +8,7 @@ from app.db_methods import (
     update_user_role_to_admin,
     delete_user_account,
     get_all_users
-    )
+)
 from app.common.util import (
     response,
     process_response_data,
@@ -20,7 +20,7 @@ from app.common.util import (
     abort_if_attribute_is_empty,
     abort_if_user_input_is_missing,
     abort_if_content_type_is_not_json
-    )
+)
 
 
 class Welcome(MethodView):
@@ -47,15 +47,14 @@ class Admin(MethodView):
     @swag_from('../docs/admin_update_role.yml')
     def put(self):
         arguments = request.get_json()
-        abort_if_user_input_is_missing(arguments, ['email', 'role'])
         abort_if_content_type_is_not_json()
-        email = arguments['email']
-        abort_if_email_does_not_match_type_email(email)
-        abort_if_user_does_not_exist(email)
-        role = arguments['role']
-        abort_if_attribute_is_empty('role', role)
         user = get_jwt_identity()
         if(user['role'] == 'admin'):
+            abort_if_user_input_is_missing(arguments, ['email', 'role'])
+            email = arguments['email']
+            abort_if_user_does_not_exist(email)
+            role = arguments['role']
+            abort_if_attribute_is_empty('role', role)
             user_details = {
                 'email': email,
                 'role': role
@@ -99,7 +98,7 @@ class User(MethodView):
         newUser = {
             'username': name,
             'password': password
-            }
+        }
         update_user_account(email=user['email'], data=newUser)
 
         return response('successfully updated account details', 201)
@@ -127,7 +126,7 @@ class User(MethodView):
             'email': email,
             'password': password,
             'role': role
-            }
+        }
         register_new_user(data=newUser)
 
         return response('successfully created new account', 201)

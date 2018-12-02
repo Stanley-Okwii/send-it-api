@@ -17,6 +17,7 @@ def register_new_user(data):
         )
     cursor.execute(query)
 
+
 def update_user_account(data, email):
     """update user information"""
     query = "UPDATE users SET username='{0}', password='{1}' WHERE email='{2}'".format(
@@ -26,6 +27,7 @@ def update_user_account(data, email):
         )
     cursor.execute(query)
 
+
 def update_user_role_to_admin(data):
     """update user information"""
     query = "UPDATE users SET role='{0}' WHERE email='{1}'".format(
@@ -34,10 +36,12 @@ def update_user_role_to_admin(data):
         )
     cursor.execute(query)
 
+
 def delete_user_account(email):
     """delete a user account"""
     query = "DELETE FROM users WHERE email='{0}'".format(email)
     cursor.execute(query)
+
 
 def get_all_users():
     """get all user accounts"""
@@ -46,6 +50,7 @@ def get_all_users():
     users = dictcur.fetchall()
 
     return users
+
 
 def create_parcel_order(data):
     """creates a new parcel delivery order"""
@@ -63,6 +68,7 @@ def create_parcel_order(data):
         )
     cursor.execute(query)
 
+
 def update_parcel_order(data):
     """updates an existing parcel delivery order"""
     query = "UPDATE parcel_order SET current_location='{0}', pickup_location='{1}', \
@@ -74,6 +80,7 @@ def update_parcel_order(data):
             data['order_id']
         )
     cursor.execute(query)
+
 
 def get_all_parcel_orders():
     query = "SELECT * FROM parcel_order"

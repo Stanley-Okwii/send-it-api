@@ -77,4 +77,4 @@ class BaseTestCase(TestCase):
                 email=email,
                 password=password
             )))
-        return json.loads(response.data.decode())['data']['user_token']
+        return json.loads(response.data.decode())['user_token']

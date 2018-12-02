@@ -3,22 +3,20 @@ import json
 
 
 class TestUtil(BaseTestCase):
-    def test_abort_sign_in_if_user_does_not_exist(self):
+    def test_abort_if_user_does_not_exist(self):
         """
-        Test a user can create an account
+        Test admin change role of none existing user
         :return:
         """
         with self.client:
-            self.register_new_user("ajori", "ajori@gmail.com",
-                                   "000000", "user")
-            response = self.client.post(
-                'api/v1/auth/signin',
-                content_type='application/json',
-                data=json.dumps(dict(
-                    email="user2@gmail.com",
-                    password="00000"))
+            token = self.get_token("admin", "admin@gmail.com",
+                                   "000000", "admin")
+            response = self.client.put(
+                '/api/v1/role',
+                data=json.dumps(dict(email="user3@gmail", role="admin")),
+                headers=dict(Authorization='Bearer ' + token),
             )
             data = response.get_json()
 
-            self.assertTrue(data['message'] == "user doesn't exist")
+            # self.assertTrue(data['message'] == "user doesn't exist")
             self.assertEqual(response.status_code, 400)
