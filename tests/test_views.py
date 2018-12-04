@@ -99,6 +99,8 @@ class TestViews(BaseTestCase):
                                    "000000", "user")
             response = self.client.delete(
                 'api/v1/user',
+                content_type="application/json",
+                data=json.dumps(dict(email="stanley@gmail.com")),
                 headers=dict(Authorization='Bearer ' + token),
             )
             response_data = json.loads(response.data.decode())

@@ -1,5 +1,4 @@
 from app.models import DataModel
-# from werkzeug.security import generate_password_hash, check_password_hash
 from flask import abort, jsonify, make_response, request
 import re
 

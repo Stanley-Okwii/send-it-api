@@ -79,8 +79,11 @@ class User(MethodView):
     @jwt_required
     @swag_from('../docs/delete_user.yml')
     def delete(self):
-        user = get_jwt_identity()
-        delete_user_account(email=user['email'])
+        abort_if_content_type_is_not_json()
+        arguments = request.get_json()
+        abort_if_user_input_is_missing(arguments, ['email'])
+        email = arguments['email']
+        delete_user_account(email=email)
 
         return response('user account deleted', 200)
 
