@@ -132,4 +132,4 @@ class User(MethodView):
         }
         register_new_user(data=newUser)
 
-        return response('successfully created new account', 201)
+        return response('successfully created a new account', 201)

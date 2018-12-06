@@ -31,7 +31,7 @@ class TestViews(BaseTestCase):
             data = response.get_json()
 
             self.assertTrue(data['message'] ==
-                            'successfully created new account')
+                            'successfully created a new account')
             self.assertEqual(response.status_code, 201)
 
     def test_to_show_all_registered_users(self):

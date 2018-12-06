@@ -7,7 +7,8 @@ from app.common.util import (
     response,
     abort_if_content_type_is_not_json,
     abort_if_user_input_is_missing,
-    abort_if_attribute_is_empty
+    abort_if_attribute_is_empty,
+    abort_if_user_does_not_exist
     )
 from flask_jwt_extended import (
     create_access_token
@@ -24,6 +25,7 @@ class SignIn(MethodView):
         email = args['email']
         abort_if_attribute_is_empty("email", email)
         abort_if_attribute_is_empty("password", password)
+        abort_if_user_does_not_exist(email)
         user = get_specific_user(email)
         user_identity = {
             'name': user['username'],
