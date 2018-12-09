@@ -144,15 +144,38 @@ class ParcelStatus(MethodView):
                 'order_id': currentOrder['order_id'],
                 'pickup_location': currentOrder['pickup_location'],
                 'destination': currentOrder['destination'],
-                'current_location': arguments['current_location']
-                                    if 'current_location' in arguments.keys()
-                                    else currentOrder['current_location'],
+                'current_location': currentOrder['current_location'],
                 'status': arguments['status']
-                          if 'status' in arguments.keys()
-                          else currentOrder['status']
                 }
             update_parcel_order(data=order_update)
 
             return response('parcel delivery order has been updated', 201)
+        else:
+            return response("you are not authorized to edit order", 404)
+
+
+class ParcelCurrentLocation(MethodView):
+    @jwt_required
+    def put(self):
+        abort_if_content_type_is_not_json()
+        arguments = request.get_json()
+        abort_if_user_input_is_missing(arguments, ['id'])
+        orderId = arguments['id']
+        role = get_jwt_identity()['role']
+        abort_if_parcel_does_not_exist(orderId)
+        currentOrder = get_specific_parcel_by_id(orderId)
+        if currentOrder['status'] == 'delivered':
+            return response('parcel order has already been delivered', 400)
+        if role == 'admin':
+            order_update = {
+                'order_id': currentOrder['order_id'],
+                'pickup_location': currentOrder['pickup_location'],
+                'destination': currentOrder['destination'],
+                'current_location': arguments['current_location'],
+                'status': currentOrder['status']
+                }
+            update_parcel_order(data=order_update)
+
+            return response('current location has been updated', 201)
         else:
             return response("you are not authorized to edit order", 404)

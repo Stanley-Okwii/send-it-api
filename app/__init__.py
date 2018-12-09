@@ -8,7 +8,8 @@ from app.send_it.parcel_delivery import (
     UserParcelOrder,
     CancelParcel,
     ParcelDestination,
-    ParcelStatus
+    ParcelStatus,
+    ParcelCurrentLocation
     )
 from flask_jwt_extended import JWTManager
 from flasgger import Swagger
@@ -43,6 +44,7 @@ user_parcel_order_view = UserParcelOrder.as_view('user_parcel_view')
 cancel_parcel_view = CancelParcel.as_view('cancel_parcel_view')
 parcel_destination_view = ParcelDestination.as_view('parcel_destination_view')
 parcel_status_view = ParcelStatus.as_view('parcel_status_view')
+parcel_current_location_view = ParcelCurrentLocation.as_view('parcel_current_location_view')
 
 # import views with custom error messages
 from app.common import custom_error
@@ -85,8 +87,14 @@ api.add_url_rule(
     methods=['PUT']
     )
 api.add_url_rule(
+    "/api/v1/parcels/current_location",
+    view_func=parcel_current_location_view,
+    methods=['PUT']
+    )
+api.add_url_rule(
     "/api/v1/parcels/status",
     view_func=parcel_status_view,
     methods=['PUT']
     )
 api.add_url_rule("/api/v1/role", view_func=admin_view, methods=['PUT'])
+
