@@ -1,4 +1,5 @@
 from app.models import DataModel
+from datetime import datetime
 # from werkzeug.security import generate_password_hash, check_password_hash
 
 db_connect = DataModel()
@@ -54,9 +55,11 @@ def get_all_users():
 
 def create_parcel_order(data):
     """creates a new parcel delivery order"""
+    created_at = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
     query = "INSERT INTO parcel_order(parcel, weight, \
-     price, receiver, destination, current_location, pickup_location, email) \
-        VALUES('{0}', '{1}', '{2}', '{3}','{4}', '{5}', '{6}', '{7}')".format(
+     price, receiver, destination, current_location, \
+      pickup_location, email, created_at) \
+        VALUES('{0}', '{1}', '{2}', '{3}','{4}', '{5}', '{6}', '{7}', '{8}')".format(
             data['parcel'],
             data['weight'],
             data['price'],
@@ -64,7 +67,8 @@ def create_parcel_order(data):
             data['destination'],
             data['pickup_location'],
             data['current_location'],
-            data['email']
+            data['email'],
+            created_at
         )
     cursor.execute(query)
 
