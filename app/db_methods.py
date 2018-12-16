@@ -41,7 +41,14 @@ def update_user_role_to_admin(data):
 
 def delete_user_account(email):
     """delete a user account"""
+    backup_parcels = "INSERT INTO parcel_order_archive(order_id, parcel, weight, \
+     price, receiver, destination, current_location, pickup_location, \
+    email, created_at) \
+    SELECT order_id, parcel, weight, price, receiver, destination, \
+    current_location, pickup_location, email, created_at \
+    FROM parcel_order WHERE email='{0}'".format(email)
     query = "DELETE FROM users WHERE email='{0}'".format(email)
+    cursor.execute(backup_parcels)
     cursor.execute(query)
 
 

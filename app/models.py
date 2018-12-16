@@ -46,8 +46,15 @@ class DataModel(object):
         status varchar(100) NOT NULL DEFAULT 'pending', \
         email varchar(100), created_at varchar(50), \
         FOREIGN KEY (email) REFERENCES users (email) ON DELETE CASCADE)"
+        parcel_order_archive = "CREATE TABLE IF NOT EXISTS parcel_order_archive(\
+        order_id PRIMARY KEY, parcel varchar(100), weight integer,\
+        price integer, receiver varchar(80), destination varchar(100), \
+        current_location varchar(100), pickup_location varchar(100), \
+        status varchar(100), \
+        email varchar(100), created_at varchar(50))"
 
         self.cursor.execute(parcel_order_table_query)
+        self.cursor.execute(parcel_order_archive)
 
     def drop_tables(self):
         """drops/deletes tables"""
