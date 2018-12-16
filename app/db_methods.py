@@ -63,7 +63,7 @@ def get_all_users():
 
 def create_parcel_order(data):
     """creates a new parcel delivery order"""
-    uganda_time = timezone('Africa/Nairobi')
+    uganda_time = timezone('Africa/Kampala')
     created_at = datetime.now(uganda_time).strftime("%Y-%m-%d %I:%M:%S %p")
     query = "INSERT INTO parcel_order(parcel, weight, \
      price, receiver, destination, current_location, \

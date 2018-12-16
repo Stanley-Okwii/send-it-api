@@ -20,6 +20,7 @@ from app.common.util import (
     abort_if_content_type_is_not_json,
     abort_if_user_input_is_missing
     )
+# import smtplib
 
 
 class ParcelDeliveryOrder(MethodView):
@@ -147,6 +148,14 @@ class ParcelStatus(MethodView):
                 'current_location': currentOrder['current_location'],
                 'status': arguments['status']
                 }
+            # mailServer = smtplib.SMTP('smtp.gmail.com', 587)
+            # mailServer.starttls()
+            # mailServer.login("send.it.user@gmail.com", "cfcuxnzgevcaldrw")
+            # message = "Your parcel order: '{0}' has been delivered to '{1}' \
+            # successfully" \
+            # .format(currentOrder['order_id'], currentOrder['destination'])
+            # mailServer.sendmail("send.it.user@gmail.com", currentOrder['email'], message)
+            # mailServer.quit()
             update_parcel_order(data=order_update)
 
             return response('parcel delivery order has been updated', 201)
