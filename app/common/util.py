@@ -2,6 +2,7 @@ from app.models import DataModel
 from flask import abort, jsonify, make_response, request
 import re
 from smtplib import SMTP_SSL
+from os import getenv
 
 db_connect = DataModel()
 cursor = db_connect.cursor
@@ -149,12 +150,14 @@ def abort_if_user_does_not_own_order(email, orderId):
 
 
 def send_mail(mail_to, message):
+    admin_mail = getenv('ADMIN_MAIL')
+    password = getenv('ADMIN_MAIL_PASSWORD')
     mailServer = SMTP_SSL('smtp.gmail.com', 465)
-    mailServer.login("send.it.user@gmail.com", "cfcuxnzgevcaldrw")
+    mailServer.login(admin_mail, password)
     subject = 'SEND IT COURIER SERVICES'
     body = '\r\n'.join(['To: %s' % mail_to,
-                        'From: %s' % 'send.it.user@gmail.com',
+                        'From: %s' % admin_mail,
                         'Subject: %s' % subject,
                         '', message])
-    mailServer.sendmail("send.it.user@gmail.com", mail_to, body)
+    mailServer.sendmail(admin_mail, mail_to, body)
     mailServer.quit()
