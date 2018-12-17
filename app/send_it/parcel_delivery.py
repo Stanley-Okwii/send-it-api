@@ -18,9 +18,9 @@ from app.common.util import (
     abort_if_parcel_input_is_missing,
     abort_if_parcel_input_is_not_valid,
     abort_if_content_type_is_not_json,
-    abort_if_user_input_is_missing
+    abort_if_user_input_is_missing,
+    send_mail
     )
-# import smtplib
 
 
 class ParcelDeliveryOrder(MethodView):
@@ -148,15 +148,11 @@ class ParcelStatus(MethodView):
                 'current_location': currentOrder['current_location'],
                 'status': arguments['status']
                 }
-            # mailServer = smtplib.SMTP('smtp.gmail.com', 587)
-            # mailServer.starttls()
-            # mailServer.login("send.it.user@gmail.com", "cfcuxnzgevcaldrw")
-            # message = "Your parcel order: '{0}' has been delivered to '{1}' \
-            # successfully" \
-            # .format(currentOrder['order_id'], currentOrder['destination'])
-            # mailServer.sendmail("send.it.user@gmail.com", currentOrder['email'], message)
-            # mailServer.quit()
             update_parcel_order(data=order_update)
+            message = 'Parcel delivery order: {0} has been delivered to {1}' \
+                      .format(currentOrder['order_id'], currentOrder['destination'])
+            send_mail(currentOrder['email'], message)
+            print(currentOrder['email'] + message)
 
             return response('parcel delivery order has been updated', 201)
         else:
@@ -184,6 +180,9 @@ class ParcelCurrentLocation(MethodView):
                 'status': currentOrder['status']
                 }
             update_parcel_order(data=order_update)
+            message = 'Parcel delivery order: {0} is now at : {1}' \
+                      .format(currentOrder['order_id'], arguments['current_location'])
+            send_mail(currentOrder['email'], message)
 
             return response('current location has been updated', 201)
         else:
