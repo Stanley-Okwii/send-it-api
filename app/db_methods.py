@@ -46,10 +46,10 @@ def delete_user_account(email):
     email, created_at) \
     SELECT order_id, parcel, weight, price, receiver, destination, \
     current_location, pickup_location, email, created_at \
-    FROM parcel_order WHERE email='{0}'".format(email)
-    query = "DELETE FROM users WHERE email='{0}'".format(email)
+    FROM parcel_order WHERE email='{0}'; \
+    DELETE FROM users WHERE email='{0}';".format(email)
     cursor.execute(backup_parcels)
-    cursor.execute(query)
+    # cursor.execute(query)
 
 
 def get_all_users():
