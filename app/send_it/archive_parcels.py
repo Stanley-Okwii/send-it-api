@@ -11,7 +11,7 @@ from app.common.util import (
 
 class ArchiveParcels(MethodView):
     @jwt_required
-    @swag_from('../docs/get_parcels.yml')
+    @swag_from('../docs/get_archived_parcels.yml')
     def get(self):
         user = get_jwt_identity()
         if(user['role'] == 'admin'):
