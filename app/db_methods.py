@@ -96,8 +96,8 @@ def update_parcel_order(data):
 
 
 def get_all_parcel_orders(database_table):
-    query = "SELECT * FROM %s"
-    dictcur.execute(query, database_table)
+    query = "SELECT * FROM %s" % (database_table)
+    dictcur.execute(query)
     parcel_orders = dictcur.fetchall()
 
     return parcel_orders
