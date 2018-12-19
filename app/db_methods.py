@@ -42,9 +42,9 @@ def delete_user_account(email):
     """delete a user account"""
     backup_parcels = "INSERT INTO parcel_order_archive(order_id, parcel, weight, \
      price, receiver, destination, current_location, pickup_location, \
-    email, created_at) \
+    email, created_at, status) \
     SELECT order_id, parcel, weight, price, receiver, destination, \
-    current_location, pickup_location, email, created_at \
+    current_location, pickup_location, email, created_at, status \
     FROM parcel_order WHERE email='%s'; \
     DELETE FROM users WHERE email='%s';" % (email, email)
     cursor.execute(backup_parcels)
@@ -65,8 +65,8 @@ def create_parcel_order(data):
     created_at = datetime.now(uganda_time).strftime("%Y-%m-%d %I:%M:%S %p")
     query = "INSERT INTO parcel_order(parcel, weight, \
      price, receiver, destination, current_location, \
-      pickup_location, email, created_at) \
-        VALUES('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s')" % (
+      pickup_location, email, created_at, status) \
+        VALUES('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s')" % (
             data['parcel'],
             data['weight'],
             data['price'],
@@ -75,7 +75,8 @@ def create_parcel_order(data):
             data['pickup_location'],
             data['current_location'],
             data['email'],
-            created_at
+            created_at,
+            'pending'
         )
     cursor.execute(query)
 
