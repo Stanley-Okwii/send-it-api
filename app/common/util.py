@@ -22,7 +22,7 @@ def process_response_data(message, status):
 
 
 def get_specific_user(email):
-    query = "SELECT * FROM users WHERE email='{0}'".format(email)
+    query = "SELECT * FROM users WHERE email='%s'" % (email)
     dictcur.execute(query)
     user = dictcur.fetchone()
 
@@ -30,7 +30,7 @@ def get_specific_user(email):
 
 
 def abort_if_user_does_not_exist(email):
-    query = "SELECT * FROM users WHERE email='{0}'".format(email)
+    query = "SELECT * FROM users WHERE email='%s'" % (email)
     dictcur.execute(query)
     user = dictcur.fetchone()
     if not user:
@@ -52,7 +52,7 @@ def abort_if_password_is_less_than_4_characters(password):
 
 
 def get_parcels_by_email(email):
-    query = "SELECT * FROM parcel_order WHERE email='{0}'".format(email)
+    query = "SELECT * FROM parcel_order WHERE email='%s'" % (email)
     dictcur.execute(query)
     parcel_order = dictcur.fetchall()
 
@@ -91,7 +91,7 @@ def abort_if_attribute_is_empty(attribute, value):
 
 
 def abort_if_user_already_exists(email, username):
-    query = "SELECT * FROM users WHERE username='{}'".format(username)
+    query = "SELECT * FROM users WHERE username='%s'" % (username)
     dictcur.execute(query)
     user_name_exists = dictcur.fetchone()
     user_exists = get_specific_user(email)
@@ -138,8 +138,8 @@ def abort_if_user_input_is_missing(parameter, details):
 
 
 def abort_if_user_does_not_own_order(email, orderId):
-    query = "SELECT * FROM parcel_order WHERE order_id='{0}' AND email='{1}' \
-            ".format(orderId, email)
+    query = "SELECT * FROM parcel_order WHERE order_id='%i' AND email='%s' \
+            " % (orderId, email)
     dictcur.execute(query)
     parcel_order = dictcur.fetchone()
 

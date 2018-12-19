@@ -200,29 +200,28 @@ class TestParcelDeliveryOrder(BaseTestCase):
         :return:
         """
         with self.client:
-            self.register_new_user("julie", "julie@gmail.com",
-                                   "00000", "admin")
+            token = self.get_token("new_user", "stanleeparker12@gmail.com",
+                                   "00000", "user")
+            admin_token = self.get_token("admin", "admin@gmail.com",
+                                         "00000", "admin")
             self.create_new_parcel_delivery_order(
-                "veg pizza",
+                "Big money",
                 '3',
-                "95210",
-                "Oryx",
+                "950",
+                "Diana",
                 "Wandegeya",
-                "Kikoni"
-                )
+                "Kikoni",
+                token
+            )
             response = self.client.put(
-                'api/v1/parcels',
+                'api/v1/parcels/current_location',
                 content_type="application/json",
+                headers=dict(Authorization='Bearer ' + admin_token),
                 data=json.dumps(dict(
-                    email="julie@gmail.com",
-                    id="025",
-                    current_location="new location",
-                    status="delivered"))
+                    id=1,
+                    current_location="new location"))
                 )
-            data = json.loads(response.data.decode())
 
-            self.assertTrue(data['message'] ==
-                            'parcel has been successfully updated')
             self.assertEqual(response.status_code, 201)
 
     @pytest.mark.skip(reason="test later")

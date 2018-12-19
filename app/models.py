@@ -59,7 +59,7 @@ class DataModel(object):
     def drop_tables(self):
         """drops/deletes tables"""
 
-        drop_user_table = "DROP TABLE users cascade;"
-        drop_parcel_order_table = "DROP TABLE parcel_order cascade;"
-        self.cursor.execute(drop_user_table)
-        self.cursor.execute(drop_parcel_order_table)
+        drop_all_tables = "DROP TABLE users cascade; \
+                           DROP TABLE parcel_order cascade; \
+                           DROP TABLE parcel_order_archive cascade;"
+        self.cursor.execute(drop_all_tables)

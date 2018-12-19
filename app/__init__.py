@@ -99,5 +99,6 @@ api.add_url_rule(
     methods=['PUT']
     )
 api.add_url_rule("/api/v1/role", view_func=admin_view, methods=['PUT'])
-api.add_url_rule("/api/v1/archive", view_func=parcel_archive_view, methods=['GET'])
-
+api.add_url_rule("/api/v1/archive",
+                 view_func=parcel_archive_view,
+                 methods=['GET'])

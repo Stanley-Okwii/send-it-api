@@ -41,7 +41,8 @@ class ParcelDeliveryOrder(MethodView):
                 'pickup_location': arguments['pickup_location'],
                 'destination': arguments['destination'],
                 'current_location': arguments['pickup_location'],
-                'email': email
+                'email': email,
+                'status': 'pending'
                 }
         create_parcel_order(newOrder)
         return response('parcel delivery order successfully created', 201)

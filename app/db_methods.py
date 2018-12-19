@@ -1,7 +1,6 @@
 from app.models import DataModel
 from datetime import datetime
-from pytz import timezone 
-# from werkzeug.security import generate_password_hash, check_password_hash
+from pytz import timezone
 
 db_connect = DataModel()
 cursor = db_connect.cursor
@@ -46,10 +45,9 @@ def delete_user_account(email):
     email, created_at) \
     SELECT order_id, parcel, weight, price, receiver, destination, \
     current_location, pickup_location, email, created_at \
-    FROM parcel_order WHERE email='{0}'; \
-    DELETE FROM users WHERE email='{0}';".format(email)
+    FROM parcel_order WHERE email='%s'; \
+    DELETE FROM users WHERE email='%s';" % (email, email)
     cursor.execute(backup_parcels)
-    # cursor.execute(query)
 
 
 def get_all_users():
@@ -68,7 +66,7 @@ def create_parcel_order(data):
     query = "INSERT INTO parcel_order(parcel, weight, \
      price, receiver, destination, current_location, \
       pickup_location, email, created_at) \
-        VALUES('{0}', '{1}', '{2}', '{3}','{4}', '{5}', '{6}', '{7}', '{8}')".format(
+        VALUES('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s')" % (
             data['parcel'],
             data['weight'],
             data['price'],
@@ -84,8 +82,8 @@ def create_parcel_order(data):
 
 def update_parcel_order(data):
     """updates an existing parcel delivery order"""
-    query = "UPDATE parcel_order SET current_location='{0}', pickup_location='{1}', \
-        status='{2}', destination='{3}' WHERE order_id='{4}'".format(
+    query = "UPDATE parcel_order SET current_location='%s', pickup_location='%s', \
+        status='%s', destination='%s' WHERE order_id='%i'" % (
             data['current_location'],
             data['pickup_location'],
             data['status'],

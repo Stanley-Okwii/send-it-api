@@ -123,23 +123,43 @@ class TestViews(BaseTestCase):
 
             self.assertEqual(response.status_code, 200)
 
-    @pytest.mark.skip(reason="test later")
     def test_admin_can_update_role_of_another_user_successfully(self):
         """
         Test to update role of a user
         :return:
         """
         with self.client:
-            self.get_token("user5", "user5@gmail.com", "000000", "user")
-            token = self.get_token("admin", "admin@gmail.com",
-                                   "000000", "admin")
+            token = self.get_token("stanley", "stanley@gmail.com",
+                                   "000000", "user")
+            admin_token = self.get_token("admin", "admin@gmail.com",
+                                         "admin123", "admin")
             response = self.client.put(
                 '/api/v1/role',
-                data=json.dumps(dict(email="user5@gmail", role="admin")),
-                headers=dict(Authorization='Bearer ' + token),
+                content_type='application/json',
+                headers=dict(Authorization='Bearer ' + admin_token),
+                data=json.dumps(dict(email="stanley@gmail.com", role="admin")),
             )
 
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, 201)
+
+    def test_user_can_not_update_role_of_another_user(self):
+        """
+        Test user can not update role of another user
+        :return:
+        """
+        with self.client:
+            token = self.get_token("stanley", "stanley@gmail.com",
+                                   "000000", "user")
+            admin_token = self.get_token("admin", "admin@gmail.com",
+                                         "admin123", "admin")
+            response = self.client.put(
+                '/api/v1/role',
+                content_type='application/json',
+                headers=dict(Authorization='Bearer ' + token),
+                data=json.dumps(dict(email="stanley@gmail.com", role="admin")),
+            )
+
+            self.assertEqual(response.status_code, 401)
 
     @pytest.mark.skip(reason="test later")
     def test_fetch_user_who_is_not_registered(self):

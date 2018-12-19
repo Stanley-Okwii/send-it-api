@@ -60,7 +60,7 @@ class Admin(MethodView):
                 'role': role
             }
             update_user_role_to_admin(user_details)
-            return response('user role changed to {}'.format(role), 200)
+            return response('user role changed to {}'.format(role), 201)
         else:
             return response(
                 'you do not have permission to access this endpoint',
