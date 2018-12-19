@@ -50,10 +50,10 @@ class ParcelDeliveryOrder(MethodView):
     @swag_from('../docs/get_parcels.yml')
     def get(self):
         user = get_jwt_identity()
-        if(user['role'] == 'admin'): 
-            parcel_list = get_all_parcel_orders()
-            return process_response_data(parcel_list, 200) 
-        else: 
+        if(user['role'] == 'admin'):
+            parcel_list = get_all_parcel_orders('parcel_order')
+            return process_response_data(parcel_list, 200)
+        else:
             abort_if_user_does_not_have_orders(user['email'])
             user_orders = get_parcels_by_email(user['email'])
             return process_response_data(user_orders, 200)
@@ -161,6 +161,7 @@ class ParcelStatus(MethodView):
 
 class ParcelCurrentLocation(MethodView):
     @jwt_required
+    @swag_from('../docs/current_location.yml')
     def put(self):
         abort_if_content_type_is_not_json()
         arguments = request.get_json()

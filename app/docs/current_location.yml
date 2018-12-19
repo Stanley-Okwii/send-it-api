@@ -1,4 +1,4 @@
-change status of a parcel delivery order
+change the current location of a parcel delivery order
 ---
 tags:
   - Parcels
@@ -24,11 +24,11 @@ parameters:
           id:
               type: integer
               default: 1
-          status:
+          current_location:
               type: string
               default: delivered
 responses:
   201:
-    description: parcel order has been updated
+    description: current location has been updated
 security:
   - bearerAuth: [] 

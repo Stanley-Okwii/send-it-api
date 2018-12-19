@@ -3,6 +3,7 @@ from app.auth.views import Welcome, User, UserList, Admin
 from app.models import DataModel
 from app.common.util import response
 from app.send_it.sign_in import SignIn
+from app.send_it.archive_parcels import ArchiveParcels
 from app.send_it.parcel_delivery import (
     ParcelDeliveryOrder,
     UserParcelOrder,
@@ -45,6 +46,7 @@ cancel_parcel_view = CancelParcel.as_view('cancel_parcel_view')
 parcel_destination_view = ParcelDestination.as_view('parcel_destination_view')
 parcel_status_view = ParcelStatus.as_view('parcel_status_view')
 parcel_current_location_view = ParcelCurrentLocation.as_view('parcel_current_location_view')
+parcel_archive_view = ArchiveParcels.as_view('parcel_archive_view')
 
 # import views with custom error messages
 from app.common import custom_error
@@ -97,4 +99,5 @@ api.add_url_rule(
     methods=['PUT']
     )
 api.add_url_rule("/api/v1/role", view_func=admin_view, methods=['PUT'])
+api.add_url_rule("/api/v1/archive", view_func=parcel_archive_view, methods=['GET'])
 
