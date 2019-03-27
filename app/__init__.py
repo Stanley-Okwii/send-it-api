@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from app.auth.views import Welcome, User, UserList, Admin
 from app.models import DataModel
 from app.common.util import response
@@ -102,3 +102,8 @@ api.add_url_rule("/api/v1/role", view_func=admin_view, methods=['PUT'])
 api.add_url_rule("/api/v1/archive",
                  view_func=parcel_archive_view,
                  methods=['GET'])
+
+@api.route('/googlebf9ed9b438635e5f.html')
+def home():
+    return render_template('googlebf9ed9b438635e5f.html')
+
