@@ -12,6 +12,7 @@ from app.send_it.parcel_delivery import (
     ParcelStatus,
     ParcelCurrentLocation
     )
+from app.templates.webhook import WebHook
 from flask_jwt_extended import JWTManager
 from flasgger import Swagger
 from flask_cors import CORS
@@ -47,6 +48,7 @@ parcel_destination_view = ParcelDestination.as_view('parcel_destination_view')
 parcel_status_view = ParcelStatus.as_view('parcel_status_view')
 parcel_current_location_view = ParcelCurrentLocation.as_view('parcel_current_location_view')
 parcel_archive_view = ArchiveParcels.as_view('parcel_archive_view')
+hook_view = WebHook.as_view('hook_view')
 
 # import views with custom error messages
 from app.common import custom_error
@@ -103,6 +105,7 @@ api.add_url_rule("/api/v1/archive",
                  view_func=parcel_archive_view,
                  methods=['GET'])
 
+api.add_url_rule("/notifications", view_func=hook_view, methods=['POST'])
 @api.route('/googlebf9ed9b438635e5f.html')
 def home():
     return render_template('googlebf9ed9b438635e5f.html')
