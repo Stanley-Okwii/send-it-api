@@ -1,0 +1,23 @@
+get all parcel delivery orders for a user
+---
+tags:
+  - Parcels
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+parameters:
+- in: header
+  schema:
+    type: string
+    format: uuid
+  required: true
+  name: Authorization
+  description: Authorization header
+responses:
+  200:
+    description: Show all users' parcel orders
+security:
+  - bearerAuth: [] 

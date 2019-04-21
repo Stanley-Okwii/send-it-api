@@ -1,0 +1,34 @@
+edit user account
+---
+tags:
+  - Users
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+parameters:
+- in: header
+  schema:
+    type: string
+    format: uuid
+  required: true
+  name: Authorization
+  description: Authorization header
+- in: body
+  name: body
+  required: true
+  schema:
+      properties:
+          email:
+              type: string
+              default: example@gmail.com
+          password:
+              type: string
+              default: password
+responses:
+  201:
+    description: user account has been updated
+security:
+  - bearerAuth: [] 
